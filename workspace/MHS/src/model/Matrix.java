@@ -40,6 +40,16 @@ public class Matrix {
 	}
 	
 	/**
+	 * 
+	 * @param index index of the column
+	 * @return the column selected
+	 */
+	public Vector<Byte> getColumn(int index)
+	{
+		return matrix.get(index);
+	}
+	
+	/**
 	 * Delete empty columns
 	 */
 	public void pruneMatrix(){
