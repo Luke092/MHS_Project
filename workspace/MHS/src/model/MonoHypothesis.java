@@ -6,7 +6,6 @@ import java.util.Vector;
 public class MonoHypothesis extends Hypothesis {
 
 	private int cN;
-	private MonoHypothesis leftParent;
 	
 	public MonoHypothesis(int cM, int cN) {
 		super(cM);
@@ -14,15 +13,6 @@ public class MonoHypothesis extends Hypothesis {
 		this.cN = cN;
 	}
 	
-	//maybe to put on Hypothesis
-	/**
-	 * set the left parent for the hypothesis
-	 * @param _leftParent the parent hypothesis
-	 */
-	public void setLeftParent(MonoHypothesis _leftParent)
-	{
-		this.leftParent = _leftParent;
-	}
 	
 	
 	@Override
@@ -110,4 +100,12 @@ public class MonoHypothesis extends Hypothesis {
 	 */
 	@Override
 	public void propagate(Hypothesis h_){}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException
+	{
+		MonoHypothesis newInstance = new MonoHypothesis(this.cM, this.cN);
+		newInstance.setBits((BitSet)this.getBits().clone());
+		return newInstance;
+	}
 }

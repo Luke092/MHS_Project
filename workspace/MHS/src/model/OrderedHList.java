@@ -18,15 +18,24 @@ public class OrderedHList extends Vector<Hypothesis>
 			int result = e.compareTo(this.get(i));
 			if(result > 0)
 			{
-				indexInsert = i;
 				break;
 			}
 			if(result == 0)
 			{
 				return false;
 			}
+			indexInsert++;
 		}
 		super.add(indexInsert, e);
 		return true;
+	}
+	
+	public Hypothesis prev(Hypothesis h)
+	{
+		int indexH = this.indexOf(h) - 1;
+		if(indexH > 0)
+			return this.get(indexH - 1);
+		else
+			return null;
 	}
 }

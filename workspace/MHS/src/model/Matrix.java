@@ -20,6 +20,7 @@ public class Matrix {
 	 */
 	private Matrix(){
 		this.matrix = new Vector<>();
+		this.deletedColumns = new Vector<>();
 	}
 	
 	public static Matrix getInstance(){
@@ -54,21 +55,36 @@ public class Matrix {
 		return column;
 	}
 	
+	public int getcM()
+	{
+		return this.matrix.get(0).size();
+	}
+	
+	public int getcN()
+	{
+		return this.matrix.size();
+	}
+	
 	/**
 	 * Delete empty columns
 	 */
 	public void pruneMatrix(){
-		for(int i = this.matrix.size(); i >= 0; i--){
-			Vector<Byte> row = this.matrix.elementAt(i);
-			int j = 0;
-			for(j = 0; j < row.size(); j++){
-				if(row.get(j) == 1){
+		
+		for(int j = this.getcM() - 1; j >= 0; j--)
+		{
+			int i = 0;
+			for(i = 0; i < this.getcN(); i++)
+			{
+				if(this.matrix.get(i).get(j) == (byte) 1)
 					break;
-				}
 			}
-			if(j >= row.size()){
-				this.deletedColumns.addElement(i);
-				this.matrix.remove(i);
+			if(i == this.getcN())
+			{
+				for(int k= 0; k < this.getcN(); k++)
+				{
+					matrix.get(k).remove(j);
+				}
+				this.deletedColumns.add(j);
 			}
 		}
 	}
@@ -77,12 +93,11 @@ public class Matrix {
 	 * Reconstruct original matrix
 	 */
 	public void reconstructMatrix(){
-		for(int i = this.deletedColumns.size(); i >=0; i--){
-			Vector<Byte> row = new Vector<>();
-			for(int j = 0; j < this.matrix.get(0).size(); j++){
-				row.add((byte) 0);
+		for(int j = this.deletedColumns.size() -1 ; j >=0; j--){
+			for(int i = 0; i < this.getcN(); i++)
+			{
+				matrix.get(i).add(this.deletedColumns.get(j), (byte) 0);
 			}
-			this.matrix.insertElementAt(row, this.deletedColumns.get(i));
 		}
 	}
 	
