@@ -95,7 +95,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 						h1.setField();
 						h1.propagate(this);
 						boolean cond = true;
-						for(int j = this.leftMost(); j < this.rightMost() - 1; j++)
+						for(int j = this.leftMost(); j <= this.rightMost(); j++)
 						{
 							Hypothesis h2 = (Hypothesis) h1.clone();
 							if(h1.getBits().get(j) != false)

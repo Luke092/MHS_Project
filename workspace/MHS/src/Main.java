@@ -37,11 +37,12 @@ public class Main
 			for(int i = 0; i < current.size(); i++)
 			{
 				Hypothesis h = current.get(i);
-				System.out.println(h);
+				//System.out.println(h);
 				if(h.check())
 				{
 					delta.add(h);
 					current.remove(i);
+					i--;
 				}
 				else
 				{
