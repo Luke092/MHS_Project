@@ -14,9 +14,10 @@ public class MonoHypothesis extends Hypothesis {
 		this.cN = cN;
 	}
 	
+	//maybe to put on Hypothesis
 	/**
-	 * set the left parent for the hypotesis
-	 * @param _leftParent the parent hypotesis
+	 * set the left parent for the hypothesis
+	 * @param _leftParent the parent hypothesis
 	 */
 	public void setLeftParent(MonoHypothesis _leftParent)
 	{
@@ -25,6 +26,9 @@ public class MonoHypothesis extends Hypothesis {
 	
 	
 	@Override
+	/**
+	 * Set the support vector used in the MHS problem resolution
+	 */
 	public void setField(){
 		int count = 0;
 		int posSinglet = -1;
@@ -51,7 +55,7 @@ public class MonoHypothesis extends Hypothesis {
 			
 			for(int i = 0; i < cN; i++)
 			{
-				if(column.get(i) == 1)
+				if(column.get(i) == (byte) 1)
 					vector.set(i, true);
 			}
 		}
@@ -65,6 +69,7 @@ public class MonoHypothesis extends Hypothesis {
 				if(lParent.get(i) ^ child.get(i))
 				{
 					indexColumnSingletParent = i;
+					break;
 				}
 			}
 			BitSet vectorLParent = leftParent.vector;
@@ -88,7 +93,7 @@ public class MonoHypothesis extends Hypothesis {
 	}
 	
 	/**
-	 * Check if the hypotesis is a valid solution for the MHS problem
+	 * Check if the hypothesis is a valid solution for the MHS problem
 	 */
 	@Override
 	public boolean check(){

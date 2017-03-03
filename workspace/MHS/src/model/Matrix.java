@@ -46,7 +46,12 @@ public class Matrix {
 	 */
 	public Vector<Byte> getColumn(int index)
 	{
-		return matrix.get(index);
+		Vector <Byte> column = new Vector<>();
+		for(int i = 0; i < matrix.size(); i++)
+		{
+			column.add(matrix.get(i).get(index));
+		}
+		return column;
 	}
 	
 	/**
@@ -79,6 +84,22 @@ public class Matrix {
 			}
 			this.matrix.insertElementAt(row, this.deletedColumns.get(i));
 		}
+	}
+	
+	@Override
+	public String toString()
+	{
+		StringBuilder string = new StringBuilder();
+		for(int i = 0; i < matrix.size(); i++)
+		{
+			Vector<Byte> row = this.matrix.elementAt(i);
+			for(int j = 0; j < row.size() ; j++)
+			{
+				string.append(row.get(j) + " ");
+			}
+			string.append("\n");
+		}
+		return string.toString();
 	}
 
 }
