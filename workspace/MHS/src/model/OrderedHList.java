@@ -33,8 +33,8 @@ public class OrderedHList extends Vector<Hypothesis>
 	public Hypothesis prev(Hypothesis h)
 	{
 		int indexH = this.indexOf(h) - 1;
-		if(indexH > 0)
-			return this.get(indexH - 1);
+		if(indexH >= 0)
+			return this.get(indexH);
 		else
 			return null;
 	}

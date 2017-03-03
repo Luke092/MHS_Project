@@ -14,12 +14,13 @@ public class Main
 		FileRead.readFile(f.getFile());
 		Matrix matrix = Matrix.getInstance();
 		System.out.println(matrix);
-		matrix.pruneMatrix();
-		System.out.println(matrix);
-		matrix.reconstructMatrix();
-		System.out.println(matrix);
+//		matrix.pruneMatrix();
+//		System.out.println(matrix);
+//		matrix.reconstructMatrix();
+//		System.out.println(matrix);
 		
 		OrderedHList delta = exploreHMonolithic(matrix.getcM(), matrix.getcN());
+		System.out.println(delta);
 	}
 	
 	public static OrderedHList exploreHMonolithic(int cM, int cN)
@@ -48,7 +49,6 @@ public class Main
 				System.out.println(next);
 			}
 			current = next;
-//			System.out.println(delta);
 		}
 		while(current.size() != 0);
 		return delta;

@@ -80,7 +80,6 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 			}
 			while(!(pred == null || this.hammingDistance(pred) == 2));
 			
-			
 //			if(pred != null)
 //				cont = 0;
 			
