@@ -34,19 +34,18 @@ public class Main
 		do
 		{
 			OrderedHList next = new OrderedHList();
-			for(Hypothesis h : current)
+			for(int i = 0; i < current.size(); i++)
 			{
-				System.out.println(h);
+				Hypothesis h = current.get(i);
 				if(h.check())
 				{
 					delta.add(h);
-					current.remove(h);
+					current.remove(i);
 				}
 				else
 				{
 					next = h.generateChildren(next, current);
 				}
-				System.out.println(next);
 			}
 			current = next;
 		}

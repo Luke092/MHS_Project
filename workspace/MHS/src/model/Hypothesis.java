@@ -6,7 +6,7 @@ import java.util.BitSet;
 public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 	
 	private BitSet bits;
-	BitSet vector;
+	public BitSet vector;
 	Hypothesis leftParent;
 	
 	int cM;

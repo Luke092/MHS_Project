@@ -27,7 +27,7 @@ public class MonoHypothesis extends Hypothesis {
 		{
 			if(this.getBits().get(i) == true)
 				count++;
-			if(count == 1)
+			if(count == 1 && posSinglet == -1)
 				posSinglet = i;
 		}
 		if(count != 1)
@@ -87,7 +87,7 @@ public class MonoHypothesis extends Hypothesis {
 	 */
 	@Override
 	public boolean check(){
-		for(int i = 0; i < this.vector.size(); i++){
+		for(int i = 0; i < cN; i++){
 			if(vector.get(i) == false){
 				return false;
 			}
