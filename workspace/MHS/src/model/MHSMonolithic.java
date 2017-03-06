@@ -16,6 +16,8 @@ public class MHSMonolithic extends MHS {
 		
 		do
 		{
+//			System.out.println("Lvl: " + this.level);
+//			System.out.println("Current: " + current);
 			OrderedHList next = new OrderedHList();
 			for(int i = 0; i < current.size(); i++)
 			{
@@ -30,8 +32,11 @@ public class MHSMonolithic extends MHS {
 				{
 					next = h.generateChildren(next, current);
 				}
+//				System.out.println("H: " + h);
+//				System.out.println("Next: " + next);
 			}
 			this.level++; // increment the level
+//			System.out.println("Delta lv: " + this.level + " = " + this.delta);
 			current = next;
 		}
 		while(current.size() != 0);

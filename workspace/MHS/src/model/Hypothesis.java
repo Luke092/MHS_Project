@@ -101,7 +101,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 							if(h1.getBits().get(j) != false)
 							{
 								h2.getBits().set(j, false);
-								if(pred.compareTo(h2) != 0)
+								if(pred == null || pred.compareTo(h2) != 0)
 								{
 									cond = false;
 									Hypothesis finalH = (Hypothesis) h1.clone();
@@ -117,15 +117,15 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 									}
 									break;
 								}
-							}
-							else
-							{
-								h1.propagate(h2);
-								do
+								else
 								{
-									pred = current.prev(pred);
+									h1.propagate(h2);
+									do
+									{
+										pred = current.prev(pred);
+									}
+									while(!(pred == null || this.hammingDistance(pred) == 2));
 								}
-								while(!(pred == null || this.hammingDistance(pred) == 2));
 							}
 							
 						}
