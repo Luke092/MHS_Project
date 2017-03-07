@@ -61,10 +61,8 @@ public class MHSMonolithic extends MHS {
 		sb.append("\n");
 		
 		// distribution
-		sb.append(";;; Distribution Map \"Cardinality\"=\"# of mhs\"\n");
-		sb.append(";;; ");
+		sb.append(";;; Distribution Map\n");
 		sb.append(this.calculateCardinality());
-		sb.append("\n");
 		
 		return sb.toString();
 	}

@@ -101,6 +101,10 @@ public class Matrix {
 		}
 	}
 	
+	public Vector<Integer> getDeletedColumns(){
+		return this.deletedColumns;
+	}
+	
 	@Override
 	public String toString()
 	{

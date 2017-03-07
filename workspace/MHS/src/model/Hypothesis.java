@@ -2,6 +2,7 @@ package model;
 
 import java.lang.Comparable;
 import java.util.BitSet;
+import java.util.Vector;
 
 public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 	
@@ -198,11 +199,33 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 		return -1;
 	}
 	
+	public void expandHypothesis(Vector<Integer> deletedColumns){
+		int finalSize = this.cM + deletedColumns.size();
+		BitSet newBits = new BitSet(finalSize);
+		boolean setted = false;
+		int hIndex = 0;
+		for(int i = 0; i < finalSize; i++){
+			setted = false;
+			for (int j = 0; j < deletedColumns.size(); j++){
+				if(deletedColumns.get(j) == i){
+					newBits.set(i, false);
+					setted = true;
+					break;
+				}
+			}
+			if(!setted){
+				newBits.set(i, this.bits.get(hIndex));
+				hIndex++;
+			}
+		}
+		this.bits = newBits;
+		this.cM = finalSize;
+	}
+	
 	@Override
 	public String toString()
 	{
 		StringBuilder string = new StringBuilder();
-		string.append("{");
 		for(int i = 0; i < cM; i++)
 		{
 			if(this.bits.get(i))
@@ -215,7 +238,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 			}
 		}
 		string.deleteCharAt(string.length()-1);
-		string.append("}");
+		string.append(" -");
 		return string.toString();
 	}
 

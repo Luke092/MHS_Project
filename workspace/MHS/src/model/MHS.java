@@ -38,19 +38,38 @@ public abstract class MHS {
 				distribution.put(k, 1);
 			}
 		}
-		return distribution.toString();
+		StringBuffer str = new StringBuffer();
+		for(Integer k: distribution.keySet()){
+			str.append(";;; Cardinality: ");
+			str.append(k);
+			str.append("\t");
+			str.append("#: ");
+			str.append(distribution.get(k));
+			str.append("\n");
+		}
+		return str.toString();
 	}
 	
 	public Vector<Hypothesis> getDelta(){
 		return this.delta;
 	}
 	
+	public void expandHypothesis(){
+		for(Hypothesis h: this.delta){
+			h.expandHypothesis(Matrix.getInstance().getDeletedColumns());
+		}
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.statistics());
-		sb.append("\n");
-		sb.append(this.delta);
+		
+		for(Hypothesis h: this.delta){
+			sb.append(h.toString());
+			sb.append("\n");
+		}
+		
 		return sb.toString();
 	}
 	
