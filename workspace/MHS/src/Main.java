@@ -7,10 +7,13 @@ import java.io.*;
 
 public class Main
 {
-
+	private static double timeLimit = 60;
+	
 	public static void main(String[] args)
 	{
 		FileSelection f = new FileSelection("Select input matrix file", "matrix");
+
+		
 		FileRead.readFile(f.getFile());
 		Matrix matrix = Matrix.getInstance();
 		System.out.println(matrix);
@@ -18,11 +21,13 @@ public class Main
 		System.out.println(matrix);
 		
 		MHSMonolithic mhs = new MHSMonolithic();
+		mhs.setStartTime();
+		mhs.setTimeLimit(timeLimit);
 		mhs.explore();
 		matrix.reconstructMatrix();
 		mhs.expandHypothesis();
-		System.out.println(mhs);
 		
+		System.out.println(mhs);		
 		FileWrite fw = new FileWrite(getOutFile(f.getFile()));
 		fw.write(mhs.toString());
 	}
@@ -37,13 +42,22 @@ public class Main
 			fname.append(".");
 		}
 		fname.deleteCharAt(fname.length() - 1);
-		String[] path = inFile.getPath().split("[/]");
 		StringBuilder fpath = new StringBuilder();
-		for(int i = 0; i < path.length - 1; i++){
-			fpath.append(path[i]);
-			fpath.append("/");
-		}
-		fpath.append(fname.toString());
+		fpath.append(inFile.getParentFile());
+		
+		if(fpath.indexOf("/") >= 0)
+			fpath.append("/" + fname.toString());
+		else
+			fpath.append("\\" + fname.toString());
+			
+////		String[] path = inFile.getPath().split("[/]");   //works on Linux
+//		String[] path = inFile.getPath().split("\\\\");  //works on Windows
+//		StringBuilder fpath = new StringBuilder();
+//		for(int i = 0; i < path.length - 1; i++){
+//			fpath.append(path[i]);
+////			fpath.append("/");
+//			fpath.append("\\");
+//		}
 		
 		File out = new File(fpath.toString());
 		return out;

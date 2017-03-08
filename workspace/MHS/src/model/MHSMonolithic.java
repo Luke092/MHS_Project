@@ -1,5 +1,6 @@
 package model;
 
+import java.nio.charset.MalformedInputException;
 import java.util.Vector;
 
 public class MHSMonolithic extends MHS {
@@ -13,6 +14,8 @@ public class MHSMonolithic extends MHS {
 		OrderedHList current = new OrderedHList();
 		current.add(h0);
 		this.delta = new Vector<>();
+		
+		boolean timeLimitReached = false;
 		
 		do
 		{
@@ -34,12 +37,19 @@ public class MHSMonolithic extends MHS {
 				}
 //				System.out.println("H: " + h);
 //				System.out.println("Next: " + next);
+				
+				endTime = (double) System.nanoTime()/Math.pow(10, 9);
+				if((endTime - startTime) >= this.timeLimit)
+				{
+					timeLimitReached = true;
+					break;
+				}
 			}
 			this.level++; // increment the level
 //			System.out.println("Delta lv: " + this.level + " = " + this.delta);
 			current = next;
 		}
-		while(current.size() != 0);
+		while(current.size() != 0 && !timeLimitReached);
 		this.ended = true; // the algorithm has come to the end
 	}
 	
@@ -64,6 +74,8 @@ public class MHSMonolithic extends MHS {
 		sb.append(";;; Distribution Map\n");
 		sb.append(this.calculateCardinality());
 		
+		//execution time
+		sb.append(";;; Execution Time: " + this.getDurationTime() + " seconds\n");
 		return sb.toString();
 	}
 }

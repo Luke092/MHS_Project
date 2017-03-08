@@ -20,6 +20,36 @@ public abstract class MHS {
 	 */
 	int level = 0;
 	
+	/**
+	 * timestart of the execution
+	 */
+	double startTime = 0;
+	
+	/**
+	 * timeend of the execution
+	 */
+	double endTime = 0;
+	
+	/**
+	 * time limit of the execution
+	 */
+	double timeLimit = 0;
+	
+	public void setStartTime()
+	{		
+		this.startTime = (double) System.nanoTime()/Math.pow(10, 9);
+	}
+	
+	public void setTimeLimit(double limit)
+	{
+		this.timeLimit = limit;
+	}
+	
+	public double getDurationTime()
+	{
+		return endTime - startTime;
+	}
+	
 	public abstract void explore();
 	
 	public abstract String statistics(); 
