@@ -4,39 +4,89 @@ import java.lang.Comparable;
 import java.util.BitSet;
 import java.util.Vector;
 
+/**
+ * Object representing the hypothesis
+ *
+ */
 public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 	
+	/**
+	 * Bitset representing the binary interpretation of the hypothesis
+	 */
 	private BitSet bits;
+	
+	/**
+	 * Bitset representing the support vector used during the execution
+	 */
 	public BitSet vector;
+	
+	/**
+	 * Pointer to the parent that generates this hypothesis as a left child
+	 */
 	Hypothesis leftParent;
 	
+	/**
+	 * Number of elements in the hypothesis
+	 */
 	int cM;
 	
+	/**
+	 * Constructor of the hypothesis
+	 * @param cM number of elements the hypothesis contains. Equal to the number of columns of the matrix
+	 */
 	public Hypothesis(int cM){
 		this.bits = new BitSet(cM);
 		this.cM = cM;
 	}
 	
-	public void setH(Hypothesis h_){
-		this.bits = h_.getBits();
-	}
+//	/**
+//	 * Sets the hypothesis Bitset
+//	 * @param h_ the hypothesis containing the new bitset
+//	 */
+//	public void setH(Hypothesis h_){
+//		this.bits = h_.getBits();
+//	}
 	
+	/**
+	 * Gets the bitset representing the binary hypothesis
+	 * @return a BitSet object
+	 */
 	public BitSet getBits(){
 		return this.bits;
 	}
 	
+	/**
+	 * Sets a single bit in the bitset to the specified value
+	 * @param index index of the bit to set
+	 * @param value boolean value of the bit to set
+	 */
 	public void setBit(int index, boolean value){
 		this.bits.set(index, value);
 	}
 	
+	/**
+	 * Sets a bitset for the hypothesis
+	 * @param bs the new bitset
+	 */
 	public void setBits(BitSet bs){
 		this.bits = bs;
 	}
 	
+	/**
+	 * 
+	 */
 	public abstract void setField();
 	
+	/**
+	 * 
+	 * @return true if the hypothesis is a solution, otherwise false
+	 */
 	public abstract boolean check();
 	
+	/**
+	 * 
+	 * @param h_ parent hypothesis
+	 */
 	public abstract void propagate(Hypothesis h_);
 
 	/**
@@ -48,6 +98,12 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 		this.leftParent = _leftParent;
 	}
 		
+	/**
+	 * Generates the children hypothesis of this hypothesis. The children are selected pruning the H-tree
+	 * @param _next list of the previous hypotheses's children to concatenate
+	 * @param current list of the hypotheses analyzed at the current level
+	 * @return the updated list of the children
+	 */
 	public OrderedHList generateChildren(OrderedHList _next, OrderedHList current)
 	{
 		OrderedHList next = _next;
@@ -172,6 +228,11 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 		return 0;
 	}
 	
+	/**
+	 * Calculates the hamming distance between this hypothesis and another
+	 * @param h the hypothesis to compare
+	 * @return the int value of the hamming distance
+	 */
 	public int hammingDistance(Hypothesis h)
 	{
 		int count = 0;
@@ -183,6 +244,10 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 		return count;
 	}
 	
+	/**
+	 * Gets the position of the leftmost true value in the bitset
+	 * @return the index of the bit
+	 */
 	public int leftMost()
 	{
 		for(int i = 0; i < cM; i++)
@@ -190,7 +255,11 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 				return i;
 		return -1;
 	}
-	
+
+	/**
+	 * Gets the position of the rightmost true value in the bitset
+	 * @return the index of the bit
+	 */
 	public int rightMost()
 	{
 		for(int i = cM -1; i >= 0; i--)
@@ -199,6 +268,10 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 		return -1;
 	}
 	
+	/**
+	 * Restores the dimension of the hypothesis
+	 * @param deletedColumns the index of the matrix columns removed during the pruning phase.
+	 */
 	public void expandHypothesis(Vector<Integer> deletedColumns){
 		int finalSize = this.cM + deletedColumns.size();
 		BitSet newBits = new BitSet(finalSize);

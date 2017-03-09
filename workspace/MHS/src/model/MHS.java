@@ -3,6 +3,10 @@ package model;
 import java.util.HashMap;
 import java.util.Vector;
 
+/**
+ * Object containing the solution and the methods to resolve the problem considered
+ *
+ */
 public abstract class MHS {
 	
 	/**
@@ -21,41 +25,59 @@ public abstract class MHS {
 	int level = 0;
 	
 	/**
-	 * timestart of the execution
+	 * Starting time of the execution
 	 */
 	double startTime = 0;
 	
 	/**
-	 * timeend of the execution
+	 * Ending time of the execution
 	 */
 	double endTime = 0;
 	
 	/**
-	 * time limit of the execution
+	 * Time limit of the execution
 	 */
 	double timeLimit = 0;
 	
+	/**
+	 * Sets the starting time of the execution
+	 */
 	public void setStartTime()
 	{		
 		this.startTime = (double) System.nanoTime()/Math.pow(10, 9);
 	}
 	
+	/**
+	 * Sets the time limit of the execution
+	 * @param limit time limit of the execution
+	 */
 	public void setTimeLimit(double limit)
 	{
 		this.timeLimit = limit;
 	}
 	
+	/**
+	 * Gets the period of the execution
+	 * @return the number of seconds used to resolve the problem
+	 */
 	public double getDurationTime()
 	{
-		return endTime - startTime;
+		return this.endTime - this.startTime;
 	}
 	
+	/**
+	 * Explores the Hypothesis space
+	 */
 	public abstract void explore();
 	
+	/**
+	 * Gets various statistics about the execution
+	 * @return the string containing the statistics
+	 */
 	public abstract String statistics(); 
 	
 	/**
-	 * Calculate the distribution of the MHS by cardinality 
+	 * Calculates the distribution of the MHS by cardinality 
 	 */
 	public String calculateCardinality(){
 		HashMap<Integer, Integer> distribution = new HashMap<>();
@@ -80,10 +102,17 @@ public abstract class MHS {
 		return str.toString();
 	}
 	
+	/**
+	 * Gets the vector containing the solutions to the problem
+	 * @return the vector containing the solutions
+	 */
 	public Vector<Hypothesis> getDelta(){
 		return this.delta;
 	}
 	
+	/**
+	 * Restores the real dimension of the hypotheses 
+	 */
 	public void expandHypothesis(){
 		for(Hypothesis h: this.delta){
 			h.expandHypothesis(Matrix.getInstance().getDeletedColumns());

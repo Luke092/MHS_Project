@@ -2,6 +2,10 @@ package model;
 
 import java.util.Vector;
 
+/**
+ * Monolithic version of the resolution
+ *
+ */
 public class MHSMonolithic extends MHS {
 	
 	@Override

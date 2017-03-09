@@ -23,6 +23,10 @@ public class Matrix {
 		this.deletedColumns = new Vector<>();
 	}
 	
+	/**
+	 * Gets the Matrix instance
+	 * @return the pointer to the object
+	 */
 	public static Matrix getInstance(){
 		if(instance == null){
 			instance = new Matrix();
@@ -30,6 +34,11 @@ public class Matrix {
 		return instance;
 	}
 	
+	/**
+	 * Adds a single element to the matrix
+	 * @param row row of the element
+	 * @param value value of the element
+	 */
 	public void addElement(int row, byte value){
 		if(row < this.matrix.size()){
 			this.matrix.get(row).add(value);
@@ -41,7 +50,7 @@ public class Matrix {
 	}
 	
 	/**
-	 * 
+	 * Gets the column of the matrix
 	 * @param index index of the column
 	 * @return the column selected
 	 */
@@ -55,11 +64,19 @@ public class Matrix {
 		return column;
 	}
 	
+	/**
+	 * Gets the number of columns of the matrix
+	 * @return the int number
+	 */
 	public int getcM()
 	{
 		return this.matrix.get(0).size();
 	}
 	
+	/**
+	 * Gets the number of rows of the matrix
+	 * @return the int number
+	 */
 	public int getcN()
 	{
 		return this.matrix.size();
@@ -101,6 +118,10 @@ public class Matrix {
 		}
 	}
 	
+	/**
+	 * Gets the vector containing the indexes of the columns deleted in the pruning phase
+	 * @return the vector containing the int indexese
+	 */
 	public Vector<Integer> getDeletedColumns(){
 		return this.deletedColumns;
 	}

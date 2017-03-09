@@ -5,8 +5,16 @@ import java.util.Vector;
 
 public class MonoHypothesis extends Hypothesis {
 
+	/**
+	 * Number of sets in the matrix, equal to the number of rows. Represents the dimension of the support vector
+	 */
 	private int cN;
 	
+	/**
+	 * Constructor of the MonoHypothesis
+	 * @param cM number of elements in the hypothesis
+	 * @param cN number of elements in the support vector
+	 */
 	public MonoHypothesis(int cM, int cN) {
 		super(cM);
 		this.vector = new BitSet(cN);

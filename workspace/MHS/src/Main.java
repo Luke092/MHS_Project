@@ -7,6 +7,9 @@ import java.io.*;
 
 public class Main
 {
+	/**
+	 * Time limit for the execution
+	 */
 	private static double timeLimit = 60;
 	
 	public static void main(String[] args)
@@ -32,6 +35,11 @@ public class Main
 		fw.write(mhs.toString());
 	}
 	
+	/**
+	 * Creates the output solution file
+	 * @param inFile the input file
+	 * @return the output file
+	 */
 	public static File getOutFile(File inFile){
 		String name = inFile.getName();
 		String[] fileName = name.split("[.]");
@@ -50,14 +58,6 @@ public class Main
 		else
 			fpath.append("\\" + fname.toString());
 			
-////		String[] path = inFile.getPath().split("[/]");   //works on Linux
-//		String[] path = inFile.getPath().split("\\\\");  //works on Windows
-//		StringBuilder fpath = new StringBuilder();
-//		for(int i = 0; i < path.length - 1; i++){
-//			fpath.append(path[i]);
-////			fpath.append("/");
-//			fpath.append("\\");
-//		}
 		
 		File out = new File(fpath.toString());
 		return out;

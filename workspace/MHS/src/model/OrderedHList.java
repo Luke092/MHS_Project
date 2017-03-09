@@ -30,6 +30,11 @@ public class OrderedHList extends Vector<Hypothesis>
 		return true;
 	}
 	
+	/**
+	 * Returns the element preceding the selected one in the vector
+	 * @param h the vector element
+	 * @return the element preceding the input one
+	 */
 	public Hypothesis prev(Hypothesis h)
 	{
 		int indexH = this.indexOf(h) - 1;
