@@ -1,6 +1,5 @@
 package model;
 
-import java.nio.charset.MalformedInputException;
 import java.util.Vector;
 
 public class MHSMonolithic extends MHS {
@@ -38,10 +37,11 @@ public class MHSMonolithic extends MHS {
 //				System.out.println("H: " + h);
 //				System.out.println("Next: " + next);
 				
-				endTime = (double) System.nanoTime()/Math.pow(10, 9);
-				if((endTime - startTime) >= this.timeLimit)
+				this.endTime = (double) System.nanoTime()/Math.pow(10, 9);
+				if((this.endTime - this.startTime) >= this.timeLimit)
 				{
 					timeLimitReached = true;
+					
 					break;
 				}
 			}
@@ -50,7 +50,8 @@ public class MHSMonolithic extends MHS {
 			current = next;
 		}
 		while(current.size() != 0 && !timeLimitReached);
-		this.ended = true; // the algorithm has come to the end
+		if(!timeLimitReached)
+			this.ended = true; // the algorithm has come to the end
 	}
 	
 	@Override
@@ -65,6 +66,14 @@ public class MHSMonolithic extends MHS {
 		sb.append(m.getcM());
 		sb.append("]\n");
 		
+		
+		//level reached (if not completed)
+		if(!this.ended)
+		{
+			sb.append(";;; Execution stopped before conclusion \n");
+			sb.append(";;; Level reached: " + this.level);
+		}
+		
 		// mhs dimension
 		sb.append(";;; |MHS| = ");
 		sb.append(delta.size());
@@ -76,6 +85,7 @@ public class MHSMonolithic extends MHS {
 		
 		//execution time
 		sb.append(";;; Execution Time: " + this.getDurationTime() + " seconds\n");
+		
 		return sb.toString();
 	}
 }
