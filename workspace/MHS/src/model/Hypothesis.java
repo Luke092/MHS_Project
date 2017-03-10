@@ -135,7 +135,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 			int predIndex = current.indexOf(this); 
 			do
 			{
-				pred = current.get(predIndex--);
+				pred = current.get(--predIndex);
 			}
 			while(!(pred == null || this.hammingDistance(pred) == 2));
 			
@@ -196,11 +196,13 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 								
 								// Correct algorithm
 								while(!(pred == null || pred.compareTo(h2) == 0 || pred.compareTo(h2) >= 0)){
-									pred = current.get(predIndex--);
+									pred = current.get(--predIndex);
 								}
 								
 								if(pred == null || pred.compareTo(h2) != 0){
 									cond = false;
+								} else {
+									h1.propagate(h2);
 								}
 							}
 							
