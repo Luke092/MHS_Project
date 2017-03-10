@@ -70,6 +70,10 @@ public class MHSMonolithic extends MHS {
 		sb.append(m.getcM());
 		sb.append("]\n");
 		
+		// pruned matrix column size
+		sb.append(";;; |M'| = " + m.getcM1());
+		sb.append("\n");
+		
 		
 		//level reached (if not completed)
 		if(!this.ended)

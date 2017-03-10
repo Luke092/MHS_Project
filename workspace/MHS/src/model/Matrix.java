@@ -13,6 +13,8 @@ public class Matrix {
 	 */
 	private Vector<Integer> deletedColumns;
 	
+	private int cM1;
+	
 	private static Matrix instance = null;
 	
 	/**
@@ -104,6 +106,7 @@ public class Matrix {
 				this.deletedColumns.add(j);
 			}
 		}
+		this.cM1 = this.matrix.get(0).size();
 	}
 	
 	/**
@@ -124,6 +127,14 @@ public class Matrix {
 	 */
 	public Vector<Integer> getDeletedColumns(){
 		return this.deletedColumns;
+	}
+	
+	/**
+	 * 
+	 * @return dimension of pruned matrix
+	 */
+	public int getcM1(){
+		return this.cM1;
 	}
 	
 	@Override
