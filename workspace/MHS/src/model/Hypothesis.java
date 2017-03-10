@@ -131,9 +131,11 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 		{
 //			int cont; 
 			Hypothesis pred = this;
+			// contains the index of pred in current list
+			int predIndex = current.indexOf(this); 
 			do
 			{
-				pred = current.prev(pred);
+				pred = current.get(predIndex--);
 			}
 			while(!(pred == null || this.hammingDistance(pred) == 2));
 			
@@ -158,30 +160,47 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 							if(h1.getBits().get(j) != false)
 							{
 								h2.getBits().set(j, false);
-								if(pred == null || pred.compareTo(h2) != 0)
-								{
-									cond = false;
-									Hypothesis finalH = (Hypothesis) h1.clone();
-									finalH.getBits().set(this.rightMost(),false);
-									
-									while(pred != null && pred.compareTo(finalH) <= 0)
-									{
-										do
-										{
-											pred = current.prev(pred);
-										}
-										while(!(pred == null || this.hammingDistance(pred) == 2));
-									}
-									break;
+								
+								//Faulted algorithm
+//								if(pred == null || pred.compareTo(h2) != 0)
+//								{
+//									cond = false;
+//									Hypothesis finalH = (Hypothesis) h1.clone();
+//									finalH.getBits().set(this.rightMost(),false);
+//									
+//									while(pred != null && pred.compareTo(finalH) <= 0)
+//									{
+//										do
+//										{
+//											pred = current.prev(pred);
+//										}
+//										while(!(pred == null || this.hammingDistance(pred) == 2));
+//									}
+//									break;
+//								}
+//								else
+//								{
+//									h1.propagate(h2);
+//									do
+//									{
+//										pred = current.prev(pred);
+//									}
+//									while(!(pred == null || this.hammingDistance(pred) == 2));
+//								}
+								
+								// Brute-force
+//								if(!current.contains(h2)){
+//									cond = false;
+//									break;
+//								}
+								
+								// Correct algorithm
+								while(!(pred == null || pred.compareTo(h2) == 0 || pred.compareTo(h2) >= 0)){
+									pred = current.get(predIndex--);
 								}
-								else
-								{
-									h1.propagate(h2);
-									do
-									{
-										pred = current.prev(pred);
-									}
-									while(!(pred == null || this.hammingDistance(pred) == 2));
+								
+								if(pred == null || pred.compareTo(h2) != 0){
+									cond = false;
 								}
 							}
 							

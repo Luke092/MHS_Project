@@ -50,7 +50,7 @@ public class MHSMonolithic extends MHS {
 				}
 			}
 			this.level++; // increment the level
-//			System.out.println("Delta lv: " + this.level + " = " + this.delta);
+//			System.out.println("Lv: " + this.level + "\n" + next);
 			current = next;
 		}
 		while(current.size() != 0 && !timeLimitReached);
@@ -76,6 +76,7 @@ public class MHSMonolithic extends MHS {
 		{
 			sb.append(";;; Execution stopped before conclusion \n");
 			sb.append(";;; Level reached: " + this.level);
+			sb.append("\n");
 		}
 		
 		// mhs dimension
