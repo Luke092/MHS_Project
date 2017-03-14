@@ -12,8 +12,8 @@ public class Main
 	/**
 	 * Time limit for the execution
 	 */
-	private static double timeLimit = 60;
-	private static int divisionNumber = 2;
+	private static double timeLimit = 600;
+	private static int divisionNumber = 3;
 	
 	public static void main(String[] args)
 	{

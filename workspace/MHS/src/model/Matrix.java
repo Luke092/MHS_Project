@@ -144,17 +144,28 @@ public class Matrix {
 	}
 	
 	public Matrix [] divideRandomMatrix(int numberMatrices)
-	{		
-		Matrix [] matrices = new Matrix[numberMatrices];
-		for(int i = 0; i < matrices.length; i++)
-			matrices[i] = new Matrix();
-		
-		Random rand = new Random();
-		for(int i = 0; i < matrix.size(); i++)
+	{	
+		if(this.matrix.size() >= numberMatrices)
 		{
-			matrices[rand.nextInt(numberMatrices)].addRow(matrix.get(i));
+			Matrix [] matrices = new Matrix[numberMatrices];
+			for(int i = 0; i < matrices.length; i++)
+			{
+				matrices[i] = new Matrix();
+				matrices[i].addRow(this.matrix.get(i));
+			}
+			
+			Random rand = new Random();
+			for(int i = numberMatrices; i < matrix.size(); i++)
+			{
+				matrices[rand.nextInt(numberMatrices)].addRow(this.matrix.get(i));
+			}
+			return matrices;
 		}
-		return matrices;
+		else
+		{
+			System.err.println("Division number too big");
+			return null;			
+		}
 	}
 	
 	@Override
