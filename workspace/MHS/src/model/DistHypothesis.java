@@ -38,10 +38,7 @@ public class DistHypothesis extends Hypothesis {
 
 	@Override
 	public void propagate(Hypothesis h_) {
-		System.out.println("H: " + this + " H': " + h_);
-		System.out.println("h.vector = " + this.vector + " h'.vector = " + ((DistHypothesis)h_).getVector());
 		this.vector.or(((DistHypothesis)h_).getVector());
-		System.out.println("result.vector = " + this.vector);
 	}
 
 	@Override
