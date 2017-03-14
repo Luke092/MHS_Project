@@ -39,14 +39,6 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 		this.cM = cM;
 	}
 	
-//	/**
-//	 * Sets the hypothesis Bitset
-//	 * @param h_ the hypothesis containing the new bitset
-//	 */
-//	public void setH(Hypothesis h_){
-//		this.bits = h_.getBits();
-//	}
-	
 	/**
 	 * Gets the bitset representing the binary hypothesis
 	 * @return a BitSet object
@@ -129,7 +121,6 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 		}
 		else
 		{
-//			int cont; 
 			Hypothesis pred = this;
 			// contains the index of pred in current list
 			int predIndex = current.indexOf(this); 
@@ -138,9 +129,6 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 				pred = current.get(--predIndex);
 			}
 			while(!(pred == null || this.hammingDistance(pred) == 2));
-			
-//			if(pred != null)
-//				cont = 0;
 			
 			for(int i = this.leftMost() - 1; i >= 0; i--)
 			{
@@ -202,7 +190,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 								if(pred == null || pred.compareTo(h2) != 0){
 									cond = false;
 								} else {
-									h1.propagate(h2);
+									h1.propagate(pred); // pred == h2 but the vector object is filled
 								}
 							}
 							
@@ -210,11 +198,9 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 						if(cond)
 						{
 							next.add(h1);
-							//cont++;
 						}
 					} catch (CloneNotSupportedException e)
 					{
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					

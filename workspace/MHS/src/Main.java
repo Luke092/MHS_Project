@@ -1,3 +1,5 @@
+import model.Components;
+import model.MHSDistributed;
 import model.MHSMonolithic;
 import model.Matrix;
 import utility.FileRead;
@@ -14,25 +16,35 @@ public class Main
 	
 	public static void main(String[] args)
 	{
-		FileSelection f = new FileSelection("Select input matrix file", "matrix");
+//		FileSelection f = new FileSelection("Select input matrix file", "mhs");
 
 		
-		FileRead.readFile(f.getFile());
-		Matrix matrix = Matrix.getInstance();
-		System.out.println(matrix);
-		matrix.pruneMatrix();
-		System.out.println(matrix);
+//		FileRead.readFileMatrix(f.getFile());
+//		Matrix matrix = Matrix.getInstance();
+//		System.out.println(matrix);
+//		matrix.pruneMatrix();
+//		System.out.println(matrix);
+//		
+//		MHSMonolithic mhs = new MHSMonolithic();
+//		mhs.setStartTime();
+//		mhs.setTimeLimit(timeLimit);
+//		mhs.explore();
+//		matrix.reconstructMatrix();
+//		mhs.expandHypothesis();
+//		
+//		System.out.println(mhs);		
+//		FileWrite fw = new FileWrite(getOutFile(f.getFile()));
+//		fw.write(mhs.toString());
 		
-		MHSMonolithic mhs = new MHSMonolithic();
+		Components t = Components.getInstance();
+//		t.addComponent(FileRead.readFileComponent(f.getFile(), 1));
+		FileRead.readComponents(new File("/home/luca/Downloads/MHS/"));
+		MHSDistributed mhs = new MHSDistributed();
 		mhs.setStartTime();
 		mhs.setTimeLimit(timeLimit);
 		mhs.explore();
-		matrix.reconstructMatrix();
-		mhs.expandHypothesis();
+		System.out.println(mhs);
 		
-		System.out.println(mhs);		
-		FileWrite fw = new FileWrite(getOutFile(f.getFile()));
-		fw.write(mhs.toString());
 	}
 	
 	/**
