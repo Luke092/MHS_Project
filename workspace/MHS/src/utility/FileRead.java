@@ -2,20 +2,19 @@ package utility;
 
 import java.io.*;
 import java.util.BitSet;
+import java.util.Vector;
 
 import model.Component;
 import model.Components;
 import model.DistHypothesis;
 import model.Hypothesis;
 import model.Matrix;
-import model.MonoHypothesis;
 
 public class FileRead
 {
-	public static void readFileMatrix(File file)
+	public static Matrix readFileMatrix(File file)
 	{
-		Matrix matrix = Matrix.getInstance();
-
+		Matrix matrix = new Matrix();
 		try
 		{
 			BufferedReader br = new BufferedReader(new FileReader(file));
@@ -46,6 +45,7 @@ public class FileRead
 		{
 			System.err.println(ex.getMessage());
 		}
+		return matrix;
 	}
 
 	public static Component readFileComponent(File file, int k)
@@ -108,5 +108,28 @@ public class FileRead
 			return false;
 		}
 		return true;
+	}
+	
+	public static Matrix [] readMatrices(File dir)
+	{
+		Matrix [] matrices;
+		if(dir.isDirectory()){
+			File[] files = dir.listFiles(new FilenameFilter() {
+				
+				@Override
+				public boolean accept(File dir, String name) {
+					return name.toLowerCase().endsWith(".matrix");
+				}
+			});
+			matrices = new Matrix[files.length];
+			for(int i = 0; i < files.length; i++)
+			{
+				matrices[i] = new Matrix();
+				matrices[i] = readFileMatrix(files[i]);
+			}
+		} else {
+			return null;
+		}
+		return matrices;
 	}
 }

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Random;
 import java.util.Vector;
 
 public class Matrix {
@@ -15,26 +16,26 @@ public class Matrix {
 	
 	private int cM1;
 	
-	private static Matrix instance = null;
+//	private static Matrix instance = null;
 	
 	/**
 	 * Create a new Matrix
 	 */
-	private Matrix(){
+	public Matrix(){
 		this.matrix = new Vector<>();
 		this.deletedColumns = new Vector<>();
 	}
 	
-	/**
-	 * Gets the Matrix instance
-	 * @return the pointer to the object
-	 */
-	public static Matrix getInstance(){
-		if(instance == null){
-			instance = new Matrix();
-		}
-		return instance;
-	}
+//	/**
+//	 * Gets the Matrix instance
+//	 * @return the pointer to the object
+//	 */
+//	public static Matrix getInstance(){
+//		if(instance == null){
+//			instance = new Matrix();
+//		}
+//		return instance;
+//	}
 	
 	/**
 	 * Adds a single element to the matrix
@@ -129,12 +130,31 @@ public class Matrix {
 		return this.deletedColumns;
 	}
 	
+	public void addRow(Vector <Byte> row)
+	{
+		matrix.add(row);
+	}
+	
 	/**
 	 * 
 	 * @return dimension of pruned matrix
 	 */
 	public int getcM1(){
 		return this.cM1;
+	}
+	
+	public Matrix [] divideRandomMatrix(int numberMatrices)
+	{		
+		Matrix [] matrices = new Matrix[numberMatrices];
+		for(int i = 0; i < matrices.length; i++)
+			matrices[i] = new Matrix();
+		
+		Random rand = new Random();
+		for(int i = 0; i < matrix.size(); i++)
+		{
+			matrices[rand.nextInt(numberMatrices)].addRow(matrix.get(i));
+		}
+		return matrices;
 	}
 	
 	@Override
@@ -148,6 +168,7 @@ public class Matrix {
 			{
 				string.append(row.get(j) + " ");
 			}
+			string.append("-");
 			string.append("\n");
 		}
 		return string.toString();

@@ -109,16 +109,7 @@ public abstract class MHS {
 	public Vector<Hypothesis> getDelta(){
 		return this.delta;
 	}
-	
-	/**
-	 * Restores the real dimension of the hypotheses 
-	 */
-	public void expandHypothesis(){
-		for(Hypothesis h: this.delta){
-			h.expandHypothesis(Matrix.getInstance().getDeletedColumns());
-		}
-	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

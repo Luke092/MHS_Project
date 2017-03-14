@@ -8,11 +8,17 @@ import java.util.Vector;
  */
 public class MHSMonolithic extends MHS {
 	
+	private Matrix matrix = new Matrix();
+	
+	public MHSMonolithic(Matrix _matrix)
+	{
+		this.matrix = _matrix;
+	}
+	
 	@Override
 	public void explore()
 	{
-		Matrix m = Matrix.getInstance();
-		MonoHypothesis h0 = new MonoHypothesis(m.getcM(), m.getcN());
+		MonoHypothesis h0 = new MonoHypothesis(this.matrix.getcM(), this.matrix.getcN(), this.matrix);
 		h0.setField();
 		OrderedHList current = new OrderedHList();
 		current.add(h0);
@@ -60,18 +66,17 @@ public class MHSMonolithic extends MHS {
 	
 	@Override
 	public String statistics() {
-		Matrix m = Matrix.getInstance();
 		StringBuilder sb = new StringBuilder();
 		
 		// matrix summary
 		sb.append(";;; M[");
-		sb.append(m.getcN());
+		sb.append(this.matrix.getcN());
 		sb.append(", ");
-		sb.append(m.getcM());
+		sb.append(this.matrix.getcM());
 		sb.append("]\n");
 		
 		// pruned matrix column size
-		sb.append(";;; |M'| = " + m.getcM1());
+		sb.append(";;; |M'| = " + this.matrix.getcM1());
 		sb.append("\n");
 		
 		
@@ -96,5 +101,12 @@ public class MHSMonolithic extends MHS {
 		sb.append(";;; Execution Time: " + this.getDurationTime() + " seconds\n");
 		
 		return sb.toString();
+	}
+
+	public void expandHypothesis()
+	{
+		for(Hypothesis h: this.delta){
+			h.expandHypothesis(this.matrix.getDeletedColumns());
+		}
 	}
 }

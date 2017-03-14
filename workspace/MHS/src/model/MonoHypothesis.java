@@ -10,15 +10,18 @@ public class MonoHypothesis extends Hypothesis {
 	 */
 	private int cN;
 	
+	private Matrix matrix = new Matrix();
+	
 	/**
 	 * Constructor of the MonoHypothesis
 	 * @param cM number of elements in the hypothesis
 	 * @param cN number of elements in the support vector
 	 */
-	public MonoHypothesis(int cM, int cN) {
+	public MonoHypothesis(int cM, int cN, Matrix matrix) {
 		super(cM);
 		this.vector = new BitSet(cN);
 		this.cN = cN;
+		this.matrix = matrix;
 	}
 	
 	
@@ -47,7 +50,6 @@ public class MonoHypothesis extends Hypothesis {
 		}
 		else if(count == 1)
 		{
-			Matrix matrix = Matrix.getInstance();
 			Vector<Byte> column = matrix.getColumn(posSinglet);
 			vector.clear();
 			
@@ -59,7 +61,7 @@ public class MonoHypothesis extends Hypothesis {
 		}
 		else if(count > 1)
 		{
-			BitSet lParent = leftParent.getBits();
+			BitSet lParent = this.leftParent.getBits();
 			BitSet child = this.getBits();
 			int indexColumnSingletParent = -1;
 			for(int i = 0; i < cM; i++)
@@ -70,9 +72,8 @@ public class MonoHypothesis extends Hypothesis {
 					break;
 				}
 			}
-			BitSet vectorLParent = leftParent.vector;
+			BitSet vectorLParent = this.leftParent.vector;
 			
-			Matrix matrix = Matrix.getInstance();
 			Vector <Byte> columnSingletParent = matrix.getColumn(indexColumnSingletParent);
 			
 			for(int i = 0; i < cN; i++)
@@ -112,7 +113,7 @@ public class MonoHypothesis extends Hypothesis {
 	@Override
 	public Object clone() throws CloneNotSupportedException
 	{
-		MonoHypothesis newInstance = new MonoHypothesis(this.cM, this.cN);
+		MonoHypothesis newInstance = new MonoHypothesis(this.cM, this.cN, this.matrix);
 		newInstance.setBits((BitSet)this.getBits().clone());
 		return newInstance;
 	}
