@@ -6,6 +6,7 @@ import utility.FileRead;
 import utility.FileWrite;
 import view.FileSelection;
 import java.io.*;
+import java.util.Vector;
 
 public class Main
 {
@@ -15,7 +16,49 @@ public class Main
 	private static double timeLimit = 60;
 	private static int divisionNumber = 2;
 	
-	public static void main(String[] args)
+	public static void main(String[] args){
+		File f;
+		
+		if(args.length == 0){
+			//TODO: interactive choice
+		} else {
+			if(args[0].equals("--mono")){
+				if(args.length > 1){
+					String path = args[1];
+					f = new File(path);
+				} else {
+					FileSelection fs = new FileSelection("Select input matrix file", "matrix");
+					f = fs.getFile();
+				}
+				
+				Matrix m = FileRead.readFileMatrix(f);
+				MHSMonolithic mhs = new MHSMonolithic(m);
+				mhs.execute(timeLimit);
+				
+				System.out.println(mhs);
+				
+			} else if(args[0].equals("--dist")) {
+				if(args.length > 1){
+					File tmp = new File(args[1]);
+					if(tmp.isDirectory()){
+						// TODO: already have components into directory
+					} else {
+						// TODO: create partitions
+					}
+				} else {
+					// TODO: matrix selection
+				}
+			}
+		}
+		
+		
+	}
+	
+	private static void parseArgs(){
+		
+	}
+	
+	public static void main2(String[] args)
 	{
 		//MATRIX SELECTION
 		FileSelection f = new FileSelection("Select input matrix file", "matrix");
@@ -57,22 +100,35 @@ public class Main
 		Matrix [] Nmatrices = FileRead.readMatrices(new File(f.getFile().getAbsolutePath()+ "_dist"));
 		File [] filesout2 = getOutFile(f.getFile(), divisionNumber, "", "mhs", f.getFile().getName() + "_dist");
 		
+		Vector<MHSMonolithic> mhss = new Vector<>();
+		
 		for(int i = 0; i < 	Nmatrices.length; i++)
 		{
-			Nmatrices[i].pruneMatrix();
-			System.out.println(Nmatrices[i]);
+//			Nmatrices[i].pruneMatrix();
+//			System.out.println(Nmatrices[i]);
 			
 			MHSMonolithic mhs = new MHSMonolithic(Nmatrices[i]);
-			mhs.setStartTime();
-			mhs.setTimeLimit(timeLimit);
-			mhs.explore();
-			Nmatrices[i].reconstructMatrix();
-			mhs.expandHypothesis();
-			
-			System.out.println(mhs);		
-			FileWrite fw = new FileWrite(filesout2[i]);
-			fw.write(mhs.toString());
+//			mhs.setStartTime();
+//			mhs.setTimeLimit(timeLimit);
+//			mhs.explore();
+			mhs.run();
+			mhss.add(mhs);
+//			Nmatrices[i].reconstructMatrix();
+//			mhs.expandHypothesis();
+//			
+//			System.out.println(mhs);		
+//			FileWrite fw = new FileWrite(filesout2[i]);
+//			fw.write(mhs.toString());
 		}
+		
+		boolean isThreadsFinished;
+		
+		do{
+			isThreadsFinished = true;
+			for(MHSMonolithic mhs: mhss){
+				isThreadsFinished = isThreadsFinished && mhs.isThreadEnded;
+			}
+		}while(!isThreadsFinished);
 		
 		//DISTRIBUTED MHS
 		Components t = Components.getInstance();

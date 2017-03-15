@@ -1,18 +1,29 @@
 package model;
 
+import java.io.File;
 import java.util.Vector;
+
+import utility.FileWrite;
 
 /**
  * Monolithic version of the resolution
  *
  */
-public class MHSMonolithic extends MHS {
+public class MHSMonolithic extends MHS implements Runnable {
 	
 	private Matrix matrix = new Matrix();
+	
+	public boolean isThreadEnded = false;
 	
 	public MHSMonolithic(Matrix _matrix)
 	{
 		this.matrix = _matrix;
+	}
+	
+	@Override
+	public void run() {
+		this.explore();
+		this.isThreadEnded = true;
 	}
 	
 	@Override
@@ -108,5 +119,15 @@ public class MHSMonolithic extends MHS {
 		for(Hypothesis h: this.delta){
 			h.expandHypothesis(this.matrix.getDeletedColumns());
 		}
+	}
+
+	@Override
+	public void execute(double timeLimit) {
+		this.matrix.pruneMatrix();
+		this.setStartTime();
+		this.setTimeLimit(timeLimit);
+		this.explore();
+		this.matrix.reconstructMatrix();
+		this.expandHypothesis();
 	}
 }

@@ -65,6 +65,8 @@ public abstract class MHS {
 		return this.endTime - this.startTime;
 	}
 	
+	public abstract void execute(double timeLimit);
+	
 	/**
 	 * Explores the Hypothesis space
 	 */
