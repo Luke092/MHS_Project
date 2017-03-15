@@ -1,6 +1,7 @@
 package model;
 
 import java.util.LinkedList;
+import java.util.Vector;
 
 public class Component {
 
@@ -12,6 +13,17 @@ public class Component {
 	
 	public void add(Hypothesis h){
 		this.queue.add(h);
+	}
+	
+	public boolean isColumnEmpty(int column){
+		boolean isEmpty = true;
+		for(Hypothesis h : this.queue){
+			if(h.getBits().get(column)){
+				isEmpty = false;
+				break;
+			}
+		}
+		return isEmpty;
 	}
 	
 	public boolean isMHS(Hypothesis h){
@@ -51,6 +63,12 @@ public class Component {
 	@Override
 	public String toString() {
 		return queue.toString();
+	}
+
+	public void pruneComponent(Vector<Integer> deletedColumns) {
+		for(Hypothesis h: this.queue){
+			h.pruneHypothesis(deletedColumns);
+		}
 	}
 
 }

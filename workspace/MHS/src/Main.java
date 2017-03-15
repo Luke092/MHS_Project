@@ -12,8 +12,8 @@ public class Main
 	/**
 	 * Time limit for the execution
 	 */
-	private static double timeLimit = 600;
-	private static int divisionNumber = 3;
+	private static double timeLimit = 60;
+	private static int divisionNumber = 2;
 	
 	public static void main(String[] args)
 	{
@@ -78,6 +78,8 @@ public class Main
 		Components t = Components.getInstance();
 //		t.addComponent(FileRead.readFileComponent(f.getFile(), 1));
 		FileRead.readComponents(new File(f.getFile().getAbsolutePath()+ "_dist"));
+		t.pruneComponents();
+		
 		MHSDistributed mhs = new MHSDistributed();
 		mhs.setStartTime();
 		mhs.setTimeLimit(timeLimit);

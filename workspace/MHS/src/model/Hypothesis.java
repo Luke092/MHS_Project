@@ -9,27 +9,27 @@ import java.util.Vector;
  *
  */
 public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
-	
+
 	/**
 	 * Bitset representing the binary interpretation of the hypothesis
 	 */
 	private BitSet bits;
-	
+
 	/**
 	 * Bitset representing the support vector used during the execution
 	 */
 	public BitSet vector;
-	
+
 	/**
 	 * Pointer to the parent that generates this hypothesis as a left child
 	 */
 	Hypothesis leftParent;
-	
+
 	/**
 	 * Number of elements in the hypothesis
 	 */
 	int cM;
-	
+
 	/**
 	 * Constructor of the hypothesis
 	 * @param cM number of elements the hypothesis contains. Equal to the number of columns of the matrix
@@ -38,7 +38,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 		this.bits = new BitSet(cM);
 		this.cM = cM;
 	}
-	
+
 	/**
 	 * Gets the bitset representing the binary hypothesis
 	 * @return a BitSet object
@@ -46,7 +46,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 	public BitSet getBits(){
 		return this.bits;
 	}
-	
+
 	/**
 	 * Sets a single bit in the bitset to the specified value
 	 * @param index index of the bit to set
@@ -55,7 +55,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 	public void setBit(int index, boolean value){
 		this.bits.set(index, value);
 	}
-	
+
 	/**
 	 * Sets a bitset for the hypothesis
 	 * @param bs the new bitset
@@ -63,18 +63,18 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 	public void setBits(BitSet bs){
 		this.bits = bs;
 	}
-	
+
 	/**
 	 * 
 	 */
 	public abstract void setField();
-	
+
 	/**
 	 * 
 	 * @return true if the hypothesis is a solution, otherwise false
 	 */
 	public abstract boolean check();
-	
+
 	/**
 	 * 
 	 * @param h_ parent hypothesis
@@ -89,7 +89,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 	{
 		this.leftParent = _leftParent;
 	}
-		
+
 	/**
 	 * Generates the children hypothesis of this hypothesis. The children are selected pruning the H-tree
 	 * @param _next list of the previous hypotheses's children to concatenate
@@ -116,7 +116,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}
 		}
 		else
@@ -129,7 +129,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 				pred = current.get(--predIndex);
 			}
 			while(!(pred == null || this.hammingDistance(pred) == 2));
-			
+
 			for(int i = this.leftMost() - 1; i >= 0; i--)
 			{
 				if(pred != null)
@@ -148,52 +148,52 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 							if(h1.getBits().get(j) != false)
 							{
 								h2.getBits().set(j, false);
-								
+
 								//Faulted algorithm
-//								if(pred == null || pred.compareTo(h2) != 0)
-//								{
-//									cond = false;
-//									Hypothesis finalH = (Hypothesis) h1.clone();
-//									finalH.getBits().set(this.rightMost(),false);
-//									
-//									while(pred != null && pred.compareTo(finalH) <= 0)
-//									{
-//										do
-//										{
-//											pred = current.prev(pred);
-//										}
-//										while(!(pred == null || this.hammingDistance(pred) == 2));
-//									}
-//									break;
-//								}
-//								else
-//								{
-//									h1.propagate(h2);
-//									do
-//									{
-//										pred = current.prev(pred);
-//									}
-//									while(!(pred == null || this.hammingDistance(pred) == 2));
-//								}
-								
+								//								if(pred == null || pred.compareTo(h2) != 0)
+								//								{
+								//									cond = false;
+								//									Hypothesis finalH = (Hypothesis) h1.clone();
+								//									finalH.getBits().set(this.rightMost(),false);
+								//									
+								//									while(pred != null && pred.compareTo(finalH) <= 0)
+								//									{
+								//										do
+								//										{
+								//											pred = current.prev(pred);
+								//										}
+								//										while(!(pred == null || this.hammingDistance(pred) == 2));
+								//									}
+								//									break;
+								//								}
+								//								else
+								//								{
+								//									h1.propagate(h2);
+								//									do
+								//									{
+								//										pred = current.prev(pred);
+								//									}
+								//									while(!(pred == null || this.hammingDistance(pred) == 2));
+								//								}
+
 								// Brute-force
-//								if(!current.contains(h2)){
-//									cond = false;
-//									break;
-//								}
-								
+								//								if(!current.contains(h2)){
+								//									cond = false;
+								//									break;
+								//								}
+
 								// Correct algorithm
 								while(!(pred == null || pred.compareTo(h2) == 0 || pred.compareTo(h2) >= 0)){
 									pred = current.get(--predIndex);
 								}
-								
+
 								if(pred == null || pred.compareTo(h2) != 0){
 									cond = false;
 								} else {
 									h1.propagate(pred); // pred == h2 but the vector object is filled
 								}
 							}
-							
+
 						}
 						if(cond)
 						{
@@ -203,17 +203,17 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 					{
 						e.printStackTrace();
 					}
-					
+
 				}
 			}
 		}
-		
+
 		return next;
 	}
-	
+
 	@Override
 	public abstract Object clone() throws CloneNotSupportedException;
-	
+
 	@Override
 	public int compareTo(Hypothesis o)
 	{
@@ -234,7 +234,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Calculates the hamming distance between this hypothesis and another
 	 * @param h the hypothesis to compare
@@ -250,7 +250,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 		}
 		return count;
 	}
-	
+
 	/**
 	 * Gets the position of the leftmost true value in the bitset
 	 * @return the index of the bit
@@ -274,7 +274,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 				return i;
 		return -1;
 	}
-	
+
 	/**
 	 * Restores the dimension of the hypothesis
 	 * @param deletedColumns the index of the matrix columns removed during the pruning phase.
@@ -301,7 +301,25 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 		this.bits = newBits;
 		this.cM = finalSize;
 	}
-	
+
+	public void pruneHypothesis(Vector<Integer> deletedColumns){
+		BitSet newBits = new BitSet(this.cM - deletedColumns.size());
+		int newIndex = 0;
+		int delColIndex = 0;
+		for(int i = 0; i < this.cM; i++){
+			boolean isDeleted = false;
+			if(deletedColumns.get(delColIndex) == i){
+				isDeleted = true;
+				delColIndex++;
+				break;
+			}
+			if(!isDeleted){
+				newBits.set(newIndex, this.bits.get(i));
+				newIndex++;
+			}
+		}
+	}
+
 	@Override
 	public String toString()
 	{

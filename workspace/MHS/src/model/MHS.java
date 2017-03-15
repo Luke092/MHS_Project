@@ -70,6 +70,8 @@ public abstract class MHS {
 	 */
 	public abstract void explore();
 	
+	public abstract void expandHypothesis();
+	
 	/**
 	 * Gets various statistics about the execution
 	 * @return the string containing the statistics

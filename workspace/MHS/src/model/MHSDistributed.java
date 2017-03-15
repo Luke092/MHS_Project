@@ -94,5 +94,12 @@ public class MHSDistributed extends MHS{
 		
 		return sb.toString();
 	}
+	
+	public void expandHypothesis()
+	{
+		for(Hypothesis h: this.delta){
+			h.expandHypothesis(Components.getInstance().getDeletedColumns());
+		}
+	}
 
 }
