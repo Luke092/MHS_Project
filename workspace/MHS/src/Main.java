@@ -93,7 +93,7 @@ public class Main
 	 * @param inFile the input file
 	 * @return the output file
 	 */
-	public static File [] getOutFile(File inFile,int numberFiles,String nameExt, String ext, String dir){
+	public static File [] getOutFile(File inFile,int numberFiles, String nameExt, String ext, String dir){
 		
 		File [] out = new File[numberFiles];
 		for(int i = 0; i < numberFiles; i++)
@@ -125,7 +125,8 @@ public class Main
 				{
 					fpath.append("/" + dir);
 					File directory = new File(fpath.toString());
-					directory.mkdir();
+					if(!directory.exists())
+						directory.mkdir();
 				}
 				fpath.append("/" + fname.toString());
 			}
