@@ -6,7 +6,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class FileSelection extends JPanel
+public class DirectorySelection extends JPanel
 {
 	/**
 	 * 
@@ -18,14 +18,12 @@ public class FileSelection extends JPanel
 	/**
 	 * constructor
 	 */
-	public FileSelection(String title,String ... extensions)
+	public DirectorySelection(String title)
 	{
 		fileChooser = new JFileChooser();
-		String name = extensions[0];
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(name, extensions);
-		fileChooser.setFileFilter(filter);
 		fileChooser.setDialogTitle(title);
 		fileChooser.setCurrentDirectory(new File("."));
+		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		result = fileChooser.showOpenDialog(null);
 	}
 

@@ -1,6 +1,7 @@
 import model.*;
 import model.events.ExecutionEvent;
 import utility.*;
+import view.DirectorySelection;
 import view.FileSelection;
 import java.io.*;
 import java.util.Vector;
@@ -22,19 +23,28 @@ public class Main
 	}
 	
 	private static void parseArgs(String args[]){
-		File f;
+		File f = null;
 		
-		if(args.length > 2){
-			for(int j = 2; j < args.length; j++){
+		if(args.length > 1){
+			for(int j = 1; j < args.length; j++){
 				switch(args[j]){
+				case "--path":
+						String path = args[++j];
+						f = new File(path);
+						
+						if(!(f.exists())){
+							System.err.println("File not found!");
+							System.exit(-1);
+						}
+					break;
 				case "--timeLimit":
 					try{
 						timeLimit = Double.parseDouble(args[++j]);
 					} catch(ArrayIndexOutOfBoundsException ex){
-						System.err.println("L'opzione \"--timeLimit\" richiede il tempo in secondi!");
+						System.err.println("The option \"--timeLimit\" is not specified!");
 						System.exit(-2);
 					} catch (NumberFormatException ex){
-						System.err.println("L'opzione \"--timeLimit\" richiede il tempo in secondi!");
+						System.err.println("The option \"--timeLimit\" is a number!");
 						System.exit(-2);
 					}
 					break;
@@ -42,10 +52,10 @@ public class Main
 					try{
 						divisionNumber = Integer.parseInt(args[++j]);
 					} catch(ArrayIndexOutOfBoundsException ex){
-						System.err.println("L'opzione \"--partitions\" richiede un numero intero!");
+						System.err.println("The option \"--partitions\" is not specified!");
 						System.exit(-2);
 					} catch (NumberFormatException ex){
-						System.err.println("L'opzione \"--partitions\" richiede un numero intero!");
+						System.err.println("The option \"--partitions\" is a number!");
 						System.exit(-2);
 					}
 					break;
@@ -54,17 +64,14 @@ public class Main
 		}
 		
 		if(args[0].equals("--mono")){
-			if(args.length > 1){
-				String path = args[1];
-				f = new File(path);
-				
-				if(!(f.exists() && f.isFile())){
-					System.err.println("Il file non esiste!");
-					System.exit(-1);
-				}
-			} else {
+			if(f == null){
 				FileSelection fs = new FileSelection("Select input matrix file", "matrix");
 				f = fs.getFile();
+				if(f == null)
+				{
+					System.out.println("File not selected. Termined");
+					System.exit(0);
+				}				
 			}
 			
 			Thread t = monoExecution(f);
@@ -75,17 +82,42 @@ public class Main
 			}
 						
 		} else if(args[0].equals("--dist")) {
-			if(args.length > 1){
-				File tmp = new File(args[1]);
-				if(tmp.isDirectory()){
-					// TODO: already have components into directory
+			if(f != null){
+				if(f.isDirectory()){
+					distExecution(f);
+					
 				} else {
 					// TODO: create partitions
 				}
 			} else {
-				// TODO: matrix selection
+				// TODO: ask user if directory or file
+				DirectorySelection ds = new DirectorySelection("Select input directory");
+				f = ds.getFile();
+				if(f == null)
+				{
+					System.out.println("File not selected. Termined");
+					System.exit(0);
+				}	
+				distExecution(f);
 			}
 		}
+	}
+	
+	private static void distExecution(File f)
+	{
+		Components t = Components.getInstance();
+//		t.addComponent(FileRead.readFileComponent(f.getFile(), 1));
+		FileRead.readComponents(f);
+		t.pruneComponents();
+		
+		MHSDistributed mhs = new MHSDistributed();
+		mhs.setStartTime();
+		mhs.setTimeLimit(timeLimit);
+		mhs.explore();
+		System.out.println(mhs);
+		File resultFile [] = getOutFile(f, 1,"_dist", "mhs", "");
+		FileWrite fw = new FileWrite(resultFile[0]);
+		fw.write(mhs.toString());
 	}
 	
 	private static Thread monoExecution(File f){
@@ -98,6 +130,9 @@ public class Main
 			@Override
 			public void OnExecutionEnd(MHS sender) {
 				System.out.println(sender);
+				File outs [] = getOutFile(f, 1, "", "mhs", "");
+				FileWrite fw = new FileWrite(outs[0]);
+				fw.write(sender.toString());
 			}
 		});
 		
