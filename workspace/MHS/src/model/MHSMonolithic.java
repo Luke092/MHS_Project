@@ -22,8 +22,9 @@ public class MHSMonolithic extends MHS implements Runnable {
 	
 	@Override
 	public void run() {
-		this.explore();
-		this.isThreadEnded = true;
+		this.execute();
+//		this.isThreadEnded = true;
+		this.executionEnd();
 	}
 	
 	@Override
@@ -122,10 +123,9 @@ public class MHSMonolithic extends MHS implements Runnable {
 	}
 
 	@Override
-	public void execute(double timeLimit) {
+	public void execute() {
 		this.matrix.pruneMatrix();
 		this.setStartTime();
-		this.setTimeLimit(timeLimit);
 		this.explore();
 		this.matrix.reconstructMatrix();
 		this.expandHypothesis();

@@ -103,7 +103,7 @@ public class MHSDistributed extends MHS{
 	}
 
 	@Override
-	public void execute(double timeLimit) {
+	public void execute() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,9 +1,6 @@
-import model.Components;
-import model.MHSDistributed;
-import model.MHSMonolithic;
-import model.Matrix;
-import utility.FileRead;
-import utility.FileWrite;
+import model.*;
+import model.events.ExecutionEvent;
+import utility.*;
 import view.FileSelection;
 import java.io.*;
 import java.util.Vector;
@@ -17,45 +14,97 @@ public class Main
 	private static int divisionNumber = 2;
 	
 	public static void main(String[] args){
-		File f;
-		
 		if(args.length == 0){
 			//TODO: interactive choice
 		} else {
-			if(args[0].equals("--mono")){
-				if(args.length > 1){
-					String path = args[1];
-					f = new File(path);
-				} else {
-					FileSelection fs = new FileSelection("Select input matrix file", "matrix");
-					f = fs.getFile();
-				}
-				
-				Matrix m = FileRead.readFileMatrix(f);
-				MHSMonolithic mhs = new MHSMonolithic(m);
-				mhs.execute(timeLimit);
-				
-				System.out.println(mhs);
-				
-			} else if(args[0].equals("--dist")) {
-				if(args.length > 1){
-					File tmp = new File(args[1]);
-					if(tmp.isDirectory()){
-						// TODO: already have components into directory
-					} else {
-						// TODO: create partitions
+			parseArgs(args);
+		}
+	}
+	
+	private static void parseArgs(String args[]){
+		File f;
+		
+		if(args.length > 2){
+			for(int j = 2; j < args.length; j++){
+				switch(args[j]){
+				case "--timeLimit":
+					try{
+						timeLimit = Double.parseDouble(args[++j]);
+					} catch(ArrayIndexOutOfBoundsException ex){
+						System.err.println("L'opzione \"--timeLimit\" richiede il tempo in secondi!");
+						System.exit(-2);
+					} catch (NumberFormatException ex){
+						System.err.println("L'opzione \"--timeLimit\" richiede il tempo in secondi!");
+						System.exit(-2);
 					}
-				} else {
-					// TODO: matrix selection
+					break;
+				case "--partitions":
+					try{
+						divisionNumber = Integer.parseInt(args[++j]);
+					} catch(ArrayIndexOutOfBoundsException ex){
+						System.err.println("L'opzione \"--partitions\" richiede un numero intero!");
+						System.exit(-2);
+					} catch (NumberFormatException ex){
+						System.err.println("L'opzione \"--partitions\" richiede un numero intero!");
+						System.exit(-2);
+					}
+					break;
 				}
 			}
 		}
 		
-		
+		if(args[0].equals("--mono")){
+			if(args.length > 1){
+				String path = args[1];
+				f = new File(path);
+				
+				if(!(f.exists() && f.isFile())){
+					System.err.println("Il file non esiste!");
+					System.exit(-1);
+				}
+			} else {
+				FileSelection fs = new FileSelection("Select input matrix file", "matrix");
+				f = fs.getFile();
+			}
+			
+			Thread t = monoExecution(f);
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+						
+		} else if(args[0].equals("--dist")) {
+			if(args.length > 1){
+				File tmp = new File(args[1]);
+				if(tmp.isDirectory()){
+					// TODO: already have components into directory
+				} else {
+					// TODO: create partitions
+				}
+			} else {
+				// TODO: matrix selection
+			}
+		}
 	}
 	
-	private static void parseArgs(){
+	private static Thread monoExecution(File f){
+		Matrix m = FileRead.readFileMatrix(f);
+		MHSMonolithic mhs = new MHSMonolithic(m);
+		mhs.setTimeLimit(timeLimit);
 		
+		mhs.setObserver(new ExecutionEvent() {
+			
+			@Override
+			public void OnExecutionEnd(MHS sender) {
+				System.out.println(sender);
+			}
+		});
+		
+		Thread t = new Thread(mhs);
+		t.start();
+		
+		return t;
 	}
 	
 	public static void main2(String[] args)

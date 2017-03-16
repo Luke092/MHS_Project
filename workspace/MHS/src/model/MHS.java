@@ -3,11 +3,24 @@ package model;
 import java.util.HashMap;
 import java.util.Vector;
 
+import model.events.ExecutionEvent;
+
 /**
  * Object containing the solution and the methods to resolve the problem considered
  *
  */
 public abstract class MHS {
+	
+	private ExecutionEvent observer;
+	
+	public void setObserver(ExecutionEvent o){
+		observer = o;
+	}
+	
+	void executionEnd(){
+		if(observer != null)
+			observer.OnExecutionEnd(this);
+	}
 	
 	/**
 	 * MHS vector, store all mhs found
@@ -65,7 +78,7 @@ public abstract class MHS {
 		return this.endTime - this.startTime;
 	}
 	
-	public abstract void execute(double timeLimit);
+	public abstract void execute();
 	
 	/**
 	 * Explores the Hypothesis space
