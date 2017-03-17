@@ -35,7 +35,7 @@ public abstract class MHS {
 	/**
 	 * Level of H witch the algorithm was stopped
 	 */
-	int level = 0;
+	int level = -1;
 	
 	/**
 	 * Starting time of the execution

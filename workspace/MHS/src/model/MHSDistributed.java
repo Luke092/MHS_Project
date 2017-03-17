@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Collections;
 import java.util.Vector;
 
 public class MHSDistributed extends MHS{
@@ -47,6 +48,7 @@ public class MHSDistributed extends MHS{
 			}
 			this.level++; // increment the level
 //			System.out.println("Lv: " + this.level + "\n" + next);
+			Collections.sort(next, Collections.reverseOrder());
 			current = next;
 		}
 		while(current.size() != 0 && !timeLimitReached);

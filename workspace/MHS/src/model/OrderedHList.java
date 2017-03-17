@@ -9,26 +9,27 @@ public class OrderedHList extends Vector<Hypothesis>
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	public synchronized boolean add(Hypothesis e)
-	{
-		int indexInsert= 0;
-		for(int i = 0; i < this.size(); i++)
-		{
-			int result = e.compareTo(this.get(i));
-			if(result > 0)
-			{
-				break;
-			}
-			if(result == 0)
-			{
-				return false;
-			}
-			indexInsert++;
-		}
-		super.add(indexInsert, e);
-		return true;
-	}
+//	@Override
+//	public synchronized boolean add(Hypothesis e)
+//	{
+//		int indexInsert= 0;
+//		for(int i = 0; i < this.size(); i++)
+//		{
+//			int result = e.compareTo(this.get(i));
+//			if(result > 0)
+//			{
+//				break;
+//			}
+//			if(result == 0)
+//			{
+//				return false;
+//			}
+//			indexInsert++;
+//		}
+//		super.add(indexInsert, e);
+//		return true;
+//	}
+
 	
 	@Override
 	public synchronized Hypothesis get(int index) {

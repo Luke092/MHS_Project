@@ -1,9 +1,7 @@
 package model;
 
-import java.io.File;
+import java.util.Collections;
 import java.util.Vector;
-
-import utility.FileWrite;
 
 /**
  * Monolithic version of the resolution
@@ -69,6 +67,7 @@ public class MHSMonolithic extends MHS implements Runnable {
 			}
 			this.level++; // increment the level
 //			System.out.println("Lv: " + this.level + "\n" + next);
+			Collections.sort(next, Collections.reverseOrder());
 			current = next;
 		}
 		while(current.size() != 0 && !timeLimitReached);
