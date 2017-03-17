@@ -30,7 +30,7 @@ public class MHSMonolithic extends MHS implements Runnable {
 	@Override
 	public void explore()
 	{
-		MonoHypothesis h0 = new MonoHypothesis(this.matrix.getcM(), this.matrix.getcN(), this.matrix);
+		MonoHypothesis h0 = new MonoHypothesis(this.matrix.getcM1(), this.matrix.getcN(), this.matrix);
 		h0.setField();
 		OrderedHList current = new OrderedHList();
 		current.add(h0);
@@ -127,7 +127,6 @@ public class MHSMonolithic extends MHS implements Runnable {
 		this.matrix.pruneMatrix();
 		this.setStartTime();
 		this.explore();
-		this.matrix.reconstructMatrix();
 		this.expandHypothesis();
 	}
 }

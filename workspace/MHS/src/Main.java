@@ -87,7 +87,9 @@ public class Main
 					distExecution(f);
 					
 				} else {
-					// TODO: create partitions
+					File [] matrices = matrixDivision(f);
+					File dir = generateComponents(matrices);
+					distExecution(dir);
 				}
 			} else {
 				// TODO: ask user if directory or file
@@ -105,15 +107,12 @@ public class Main
 	
 	private static void distExecution(File f)
 	{
-		Components t = Components.getInstance();
 //		t.addComponent(FileRead.readFileComponent(f.getFile(), 1));
 		FileRead.readComponents(f);
-		t.pruneComponents();
 		
 		MHSDistributed mhs = new MHSDistributed();
-		mhs.setStartTime();
 		mhs.setTimeLimit(timeLimit);
-		mhs.explore();
+		mhs.execute();
 		System.out.println(mhs);
 		File resultFile [] = getOutFile(f, 1,"_dist", "mhs", "");
 		FileWrite fw = new FileWrite(resultFile[0]);
@@ -140,6 +139,48 @@ public class Main
 		t.start();
 		
 		return t;
+	}
+	
+	private static File[] matrixDivision(File f)
+	{
+		Matrix matrix = FileRead.readFileMatrix(f);
+		Matrix [] matrices = matrix.divideRandomMatrix(divisionNumber);
+		for(int i = 0; i < matrices.length; i++)
+		{
+			System.out.println(matrices[i]);
+		}
+		
+		File [] filesout = getOutFile(f, divisionNumber, "", "matrix", f.getName() + "_dist");
+		
+		for(int i = 0; i < matrices.length; i++)
+		{
+			FileWrite fw = new FileWrite(filesout[i]);
+			fw.write(matrices[i].toString());
+		}
+		
+		return filesout;
+	}
+	
+	private static File generateComponents(File [] matrices)
+	{
+		Thread [] t = new Thread[matrices.length];
+		for(int i = 0; i < matrices.length; i++)
+		{
+			t[i] = monoExecution(matrices[i]);
+		}
+		
+		for(int i = 0; i < t.length; i++)
+		{
+			try
+			{
+				t[i].join();
+			} catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return matrices[0].getParentFile();
 	}
 	
 	public static void main2(String[] args)

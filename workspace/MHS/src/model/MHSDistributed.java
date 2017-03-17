@@ -7,7 +7,7 @@ public class MHSDistributed extends MHS{
 	@Override
 	public void explore() {
 		Components comp = Components.getInstance();
-		DistHypothesis h0 = new DistHypothesis(comp.getcM(), comp.getK());
+		DistHypothesis h0 = new DistHypothesis(comp.getcM() - comp.getDeletedColumns().size(), comp.getK());
 		h0.setField();
 		OrderedHList current = new OrderedHList();
 		current.add(h0);
@@ -104,8 +104,10 @@ public class MHSDistributed extends MHS{
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
+		Components.getInstance().pruneComponents();
+		this.setStartTime();
+		this.explore();
+		this.expandHypothesis();		
 	}
 
 }

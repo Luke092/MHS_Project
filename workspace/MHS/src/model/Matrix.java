@@ -14,6 +14,8 @@ public class Matrix {
 	 */
 	private Vector<Integer> deletedColumns;
 	
+	
+	private int cM;
 	private int cM1;
 	
 //	private static Matrix instance = null;
@@ -73,7 +75,7 @@ public class Matrix {
 	 */
 	public int getcM()
 	{
-		return this.matrix.get(0).size();
+		return this.cM;
 	}
 	
 	/**
@@ -90,6 +92,7 @@ public class Matrix {
 	 */
 	public void pruneMatrix(){
 		
+		this.cM = this.matrix.get(0).size(); 
 		for(int j = this.getcM() - 1; j >= 0; j--)
 		{
 			int i = 0;

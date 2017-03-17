@@ -113,7 +113,6 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 					next.add(h1);
 				} catch (CloneNotSupportedException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
