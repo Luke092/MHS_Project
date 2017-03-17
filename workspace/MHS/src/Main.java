@@ -150,8 +150,16 @@ public class Main
 			System.out.println(matrices[i]);
 		}
 		
+		File dir = new File(f.getPath() + "_dist");
+		if(dir.isDirectory())
+		{
+			for(File fDel : dir.listFiles())
+			{
+				fDel.delete();
+			}
+		}
 		File [] filesout = getOutFile(f, divisionNumber, "", "matrix", f.getName() + "_dist");
-		
+				
 		for(int i = 0; i < matrices.length; i++)
 		{
 			FileWrite fw = new FileWrite(filesout[i]);
