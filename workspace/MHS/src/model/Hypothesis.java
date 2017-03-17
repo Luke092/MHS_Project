@@ -307,16 +307,18 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 		int delColIndex = 0;
 		for(int i = 0; i < this.cM; i++){
 			boolean isDeleted = false;
-			if(deletedColumns.get(delColIndex) == i){
-				isDeleted = true;
-				delColIndex++;
-				break;
+			if(delColIndex < deletedColumns.size()){
+				if(deletedColumns.get(delColIndex) == i){
+					isDeleted = true;
+					delColIndex++;					
+				}
 			}
 			if(!isDeleted){
 				newBits.set(newIndex, this.bits.get(i));
 				newIndex++;
 			}
 		}
+		this.bits = newBits;
 	}
 
 	@Override

@@ -46,7 +46,7 @@ public class Components {
 	 * Delete empty columns
 	 */
 	public void pruneComponents(){
-		for(int j = this.getcM() - 1; j >= 0 ; j--){
+		for(int j = 0; j < this.cM ; j++){
 			boolean isColumnEmpty = true;
 			for(Component c: this.components){
 				if(!c.isColumnEmpty(j)){

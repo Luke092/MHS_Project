@@ -34,7 +34,7 @@ public class MHSDistributed extends MHS{
 				{
 					next = h.generateChildren(next, current);
 				}
-//				System.out.println("H: " + h);
+//				System.out.println("H: " + h + " vector:" + ((DistHypothesis)h).getVector());
 //				System.out.println("Next: " + next);
 				
 				this.endTime = (double) System.nanoTime()/Math.pow(10, 9);
