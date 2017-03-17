@@ -39,7 +39,7 @@ public class MHSDistributed extends MHS{
 //				System.out.println("Next: " + next);
 				
 				this.endTime = (double) System.nanoTime()/Math.pow(10, 9);
-				if((this.endTime - this.startTime) >= this.timeLimit)
+				if((this.timeLimit >= 0) && ((this.endTime - this.startTime) >= this.timeLimit))
 				{
 					timeLimitReached = true;
 					

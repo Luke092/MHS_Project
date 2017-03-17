@@ -3,6 +3,8 @@ import model.events.ExecutionEvent;
 import utility.*;
 import view.DirectorySelection;
 import view.FileSelection;
+import view.MyMenu;
+
 import java.io.*;
 import java.util.Vector;
 
@@ -11,12 +13,32 @@ public class Main
 	/**
 	 * Time limit for the execution
 	 */
-	private static double timeLimit = 60;
+	private static double timeLimit = -1;
 	private static int divisionNumber = 2;
+	private static String mainTitle = "Choose one of the following options";
+	private static String [] mainOptions = {"Monolithic resolution","Distributed resolution"};
+	private static String [] YES_NO = {"Yes","No"};
 	
 	public static void main(String[] args){
 		if(args.length == 0){
 			//TODO: interactive choice
+			File f = null;
+			MyMenu mainMenu = new MyMenu(mainOptions, mainTitle, true);
+			int sel = mainMenu.printMenu();
+			if(sel == 0)
+			{
+				f = selectMatrixFile();	
+				Thread t = monoExecution(f);
+				try {
+					t.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+			}else if(sel == 1)
+			{
+				
+			}
 		} else {
 			parseArgs(args);
 		}
@@ -65,13 +87,7 @@ public class Main
 		
 		if(args[0].equals("--mono")){
 			if(f == null){
-				FileSelection fs = new FileSelection("Select input matrix file", "matrix");
-				f = fs.getFile();
-				if(f == null)
-				{
-					System.out.println("File not selected. Termined");
-					System.exit(0);
-				}				
+				f = selectMatrixFile();			
 			}
 			
 			Thread t = monoExecution(f);
@@ -92,15 +108,29 @@ public class Main
 					distExecution(dir);
 				}
 			} else {
-				// TODO: ask user if directory or file
-				DirectorySelection ds = new DirectorySelection("Select input directory");
-				f = ds.getFile();
-				if(f == null)
+				String [] options = {"Select the matrix","Select the components"};
+				MyMenu menu = new MyMenu(options, "Choose which file you want to load ", true);
+				int sel = menu.printMenu();
+				
+				if(sel == 0)
 				{
-					System.out.println("File not selected. Termined");
-					System.exit(0);
-				}	
-				distExecution(f);
+					f = selectMatrixFile();
+					
+					File [] matrices = matrixDivision(f);
+					File dir = generateComponents(matrices);
+					distExecution(dir);
+					
+				}else if (sel == 1)
+				{
+					DirectorySelection ds = new DirectorySelection("Select input directory");
+					f = ds.getFile();
+					if(f == null)
+					{
+						System.out.println("File not selected. Termined");
+						System.exit(0);
+					}	
+					distExecution(f);
+				}
 			}
 		}
 	}
@@ -108,8 +138,18 @@ public class Main
 	private static void distExecution(File f)
 	{
 //		t.addComponent(FileRead.readFileComponent(f.getFile(), 1));
-		FileRead.readComponents(f);
 		
+		if(timeLimit == -1)
+		{
+			MyMenu menuTimeLimit = new MyMenu(YES_NO, "Do you want to insert a time limit?", true);
+			int sel = menuTimeLimit.printMenu();
+			if(sel == 0)
+			{
+				timeLimit = readTimeLimit();
+			}
+		}
+		
+		FileRead.readComponents(f);		
 		MHSDistributed mhs = new MHSDistributed();
 		mhs.setTimeLimit(timeLimit);
 		mhs.execute();
@@ -122,6 +162,16 @@ public class Main
 	private static Thread monoExecution(File f){
 		Matrix m = FileRead.readFileMatrix(f);
 		MHSMonolithic mhs = new MHSMonolithic(m);
+		
+		if(timeLimit == -1)
+		{
+			MyMenu menuTimeLimit = new MyMenu(YES_NO, "Do you want to insert a time limit?", true);
+			int sel = menuTimeLimit.printMenu();
+			if(sel == 0)
+			{
+				timeLimit = readTimeLimit();
+			}
+		}
 		mhs.setTimeLimit(timeLimit);
 		
 		mhs.setObserver(new ExecutionEvent() {
@@ -189,6 +239,18 @@ public class Main
 		}
 		
 		return matrices[0].getParentFile();
+	}
+	
+	private static File selectMatrixFile()
+	{
+		FileSelection fs = new FileSelection("Select input matrix file", "matrix");
+		File f = fs.getFile();
+		if(f == null)
+		{
+			System.out.println("File not selected. Termined");
+			System.exit(0);
+		}
+		return f;
 	}
 	
 	public static void main2(String[] args)
@@ -340,5 +402,9 @@ public class Main
 	}
 	
 	
+	public static int readTimeLimit()
+	{
+		return MyMenu.readLimitedInt(1, -1);
+	}
 
 }

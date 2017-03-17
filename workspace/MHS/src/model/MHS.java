@@ -50,7 +50,7 @@ public abstract class MHS {
 	/**
 	 * Time limit of the execution
 	 */
-	double timeLimit = 0;
+	double timeLimit = -1;
 	
 	/**
 	 * Sets the starting time of the execution
