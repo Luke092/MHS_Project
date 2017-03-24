@@ -4,6 +4,7 @@ import utility.*;
 import view.DirectorySelection;
 import view.FileSelection;
 import view.MyMenu;
+import view.MyRead;
 
 import java.io.*;
 import java.util.Vector;
@@ -13,16 +14,15 @@ public class Main
 	/**
 	 * Time limit for the execution
 	 */
-	private static double timeLimit = -1;
-	private static int divisionNumber = 2;
+	private static double timeLimit = -2;
+	private static int divisionNumber = -1;
 	private static String mainTitle = "Choose one of the following options";
 	private static String [] mainOptions = {"Monolithic resolution","Distributed resolution"};
 	private static String [] YES_NO = {"Yes","No"};
 	
 	public static void main(String[] args){
 		if(args.length == 0){
-			//TODO: interactive choice
-			File f = null;
+			File f = null;	
 			MyMenu mainMenu = new MyMenu(mainOptions, mainTitle, true);
 			int sel = mainMenu.printMenu();
 			if(sel == 0)
@@ -37,7 +37,8 @@ public class Main
 				
 			}else if(sel == 1)
 			{
-				
+				f = distInteractiveSel();
+				distExecution(f);
 			}
 		} else {
 			parseArgs(args);
@@ -103,34 +104,18 @@ public class Main
 					distExecution(f);
 					
 				} else {
+					
+					if(divisionNumber == -1)
+					{
+						readPartition();
+					}
 					File [] matrices = matrixDivision(f);
 					File dir = generateComponents(matrices);
 					distExecution(dir);
 				}
 			} else {
-				String [] options = {"Select the matrix","Select the components"};
-				MyMenu menu = new MyMenu(options, "Choose which file you want to load ", true);
-				int sel = menu.printMenu();
-				
-				if(sel == 0)
-				{
-					f = selectMatrixFile();
-					
-					File [] matrices = matrixDivision(f);
-					File dir = generateComponents(matrices);
-					distExecution(dir);
-					
-				}else if (sel == 1)
-				{
-					DirectorySelection ds = new DirectorySelection("Select input directory");
-					f = ds.getFile();
-					if(f == null)
-					{
-						System.out.println("File not selected. Termined");
-						System.exit(0);
-					}	
-					distExecution(f);
-				}
+				f = distInteractiveSel();
+				distExecution(f);
 			}
 		}
 	}
@@ -139,14 +124,9 @@ public class Main
 	{
 //		t.addComponent(FileRead.readFileComponent(f.getFile(), 1));
 		
-		if(timeLimit == -1)
+		if(timeLimit == -2)
 		{
-			MyMenu menuTimeLimit = new MyMenu(YES_NO, "Do you want to insert a time limit?", true);
-			int sel = menuTimeLimit.printMenu();
-			if(sel == 0)
-			{
-				timeLimit = readTimeLimit();
-			}
+			readLimit();
 		}
 		
 		FileRead.readComponents(f);		
@@ -163,14 +143,9 @@ public class Main
 		Matrix m = FileRead.readFileMatrix(f);
 		MHSMonolithic mhs = new MHSMonolithic(m);
 		
-		if(timeLimit == -1)
+		if(timeLimit == -2)
 		{
-			MyMenu menuTimeLimit = new MyMenu(YES_NO, "Do you want to insert a time limit?", true);
-			int sel = menuTimeLimit.printMenu();
-			if(sel == 0)
-			{
-				timeLimit = readTimeLimit();
-			}
+			readLimit();
 		}
 		mhs.setTimeLimit(timeLimit);
 		
@@ -253,94 +228,6 @@ public class Main
 		return f;
 	}
 	
-	public static void main2(String[] args)
-	{
-		//MATRIX SELECTION
-		FileSelection f = new FileSelection("Select input matrix file", "matrix");
-
-		Matrix matrix =	FileRead.readFileMatrix(f.getFile());
-		System.out.println(matrix);
-				
-		//SINGLE MATRIX PRUNING + MONOMHS
-//		matrix.pruneMatrix();
-//		System.out.println(matrix);
-//		
-//		MHSMonolithic mhs = new MHSMonolithic(matrix);
-//		mhs.setStartTime();
-//		mhs.setTimeLimit(timeLimit);
-//		mhs.explore();
-//		matrix.reconstructMatrix();
-//		mhs.expandHypothesis();
-//		
-//		System.out.println(mhs);		
-//		FileWrite fw = new FileWrite(getOutFile(f.getFile()));
-//		fw.write(mhs.toString());
-		
-		//MATRIX DIVISION
-		Matrix [] matrices = matrix.divideRandomMatrix(divisionNumber);
-		for(int i = 0; i < matrices.length; i++)
-		{
-			System.out.println(matrices[i]);
-		}
-		
-		File [] filesout = getOutFile(f.getFile(), divisionNumber, "", "matrix", f.getFile().getName() + "_dist");
-		
-		for(int i = 0; i < matrices.length; i++)
-		{
-			FileWrite fw = new FileWrite(filesout[i]);
-			fw.write(matrices[i].toString());
-		}
-		
-		//COMPONENTS CREATION
-		Matrix [] Nmatrices = FileRead.readMatrices(new File(f.getFile().getAbsolutePath()+ "_dist"));
-		File [] filesout2 = getOutFile(f.getFile(), divisionNumber, "", "mhs", f.getFile().getName() + "_dist");
-		
-		Vector<MHSMonolithic> mhss = new Vector<>();
-		
-		for(int i = 0; i < 	Nmatrices.length; i++)
-		{
-//			Nmatrices[i].pruneMatrix();
-//			System.out.println(Nmatrices[i]);
-			
-			MHSMonolithic mhs = new MHSMonolithic(Nmatrices[i]);
-//			mhs.setStartTime();
-//			mhs.setTimeLimit(timeLimit);
-//			mhs.explore();
-			mhs.run();
-			mhss.add(mhs);
-//			Nmatrices[i].reconstructMatrix();
-//			mhs.expandHypothesis();
-//			
-//			System.out.println(mhs);		
-//			FileWrite fw = new FileWrite(filesout2[i]);
-//			fw.write(mhs.toString());
-		}
-		
-		boolean isThreadsFinished;
-		
-		do{
-			isThreadsFinished = true;
-			for(MHSMonolithic mhs: mhss){
-				isThreadsFinished = isThreadsFinished && mhs.isThreadEnded;
-			}
-		}while(!isThreadsFinished);
-		
-		//DISTRIBUTED MHS
-		Components t = Components.getInstance();
-//		t.addComponent(FileRead.readFileComponent(f.getFile(), 1));
-		FileRead.readComponents(new File(f.getFile().getAbsolutePath()+ "_dist"));
-		t.pruneComponents();
-		
-		MHSDistributed mhs = new MHSDistributed();
-		mhs.setStartTime();
-		mhs.setTimeLimit(timeLimit);
-		mhs.explore();
-		System.out.println(mhs);
-		File resultFile [] = getOutFile(f.getFile(), 1,"_dist", "mhs", f.getFile().getName() + "_dist");
-		FileWrite fw = new FileWrite(resultFile[0]);
-		fw.write(mhs.toString());
-	}
-	
 	/**
 	 * Creates the output solution file
 	 * @param inFile the input file
@@ -401,10 +288,57 @@ public class Main
 		return out;
 	}
 	
-	
-	public static int readTimeLimit()
+	public static void readLimit()
 	{
-		return MyMenu.readLimitedInt(1, -1);
+		MyMenu menuTimeLimit = new MyMenu(YES_NO, "Do you want to insert a time limit?", true);
+		int sel = menuTimeLimit.printMenu();
+		if(sel == 0)
+		{
+			timeLimit = MyRead.readTimeLimit();
+		}
+		else
+		{
+			timeLimit = -1;
+		}
 	}
+	
+	public static void readPartition()
+	{
+		System.out.println("Insert the number of partitions: ");
+		divisionNumber = MyRead.readLimitedInt(2, -1);
+	}
+	
+	public static File distInteractiveSel()
+	{
+		String [] options = {"Select the matrix","Select the components"};
+		MyMenu menu = new MyMenu(options, "Choose which file you want to load ", true);
+		int sel = menu.printMenu();
+		
+		if(sel == 0)
+		{
+			File f = selectMatrixFile();
+			
 
+			if(divisionNumber == -1)
+			{
+				readPartition();
+			}
+			File [] matrices = matrixDivision(f);
+			File dir = generateComponents(matrices);
+			return dir;
+			
+		}else if (sel == 1)
+		{
+			DirectorySelection ds = new DirectorySelection("Select input directory");
+			File f = ds.getFile();
+			if(f == null)
+			{
+				System.out.println("File not selected. Termined");
+				System.exit(0);
+			}	
+			return f;
+		}
+		
+		return null;
+	}
 }

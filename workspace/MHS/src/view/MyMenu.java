@@ -13,8 +13,6 @@ public class MyMenu
 	private String title;
 	private boolean numbers;
 	private String frame="*";
-	private static final String MIN_WARNING="Insert a value >= than ";
-	private static final String MAX_WARNING="Insert a value <= than  ";
 	
 	
 	public	MyMenu(String[] _choices,String _title,boolean useNumbers)
@@ -73,7 +71,9 @@ public class MyMenu
 					printString("* " + this.choices[i] + this.padding[i] + "*", true);				
 				}
 				printString(this.frame, true);
-				name = readString();
+				
+				name = MyRead.readString();
+				
 				for(int i = 0; i < this.numberChoices; i++)
 				{
 					if((name.equals(this.choices[i])) == true)
@@ -115,7 +115,8 @@ public class MyMenu
 				}
 			}
 			printString(this.frame, true);
-			this.selection=readLimitedInt(0, (this.numberChoices-1));
+			
+			this.selection = MyRead.readLimitedInt(0, (this.numberChoices-1));
 			printString(this.frame, true);
 		}
 		return this.selection;
@@ -127,53 +128,4 @@ public class MyMenu
 		if(newLine){System.out.println();}
 	}
 	
-	
-	public static int readLimitedInt(int min,int max)
-	{
-		int n = 0;
-		boolean check;
-		do{
-			try{
-					n = Integer.parseInt(readString());
-					check = true;	
-					
-			}catch(Exception e)
-			{
-				printString("Insert an integer ",true);
-				check = false;
-			}
-			if(n < min)
-			{
-				check = false;
-				printString(MIN_WARNING + min, true);
-			}
-			if(n > max && max > 0)
-			{
-				check = false;
-				printString(MAX_WARNING + max, true);
-			}
-		}while(check != true);
-		return n;
-	}
-	
-	public static String readString()
-	{
-		Scanner sc = new Scanner(System.in);
-		String enter = System.getProperty("line.separator");
-		sc.useDelimiter(enter);
-		boolean check;
-		String string = null;
-		do{
-			try{
-					string = sc.next();
-					check = true;
-			}catch(Exception e)
-			{
-				printString("Insert a string of characters ",true);
-				check = false;
-			}
-		}while( check != true);
-		sc.close();
-		return string;
-	}
 }

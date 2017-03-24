@@ -167,7 +167,8 @@ public class Matrix {
 		else
 		{
 			System.err.println("Division number too big");
-			return null;			
+			System.exit(1);
+			return null;
 		}
 	}
 	
