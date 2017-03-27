@@ -4,8 +4,6 @@ import java.util.BitSet;
 
 public class DistHypothesis extends Hypothesis {
 	
-	private BitSet vector;
-	
 	private int k;
 
 	public DistHypothesis(int cM, int k) {
