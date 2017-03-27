@@ -266,7 +266,7 @@ public class Main
 			if(!dir.equals(""))
 			{
 //				if(fpath.indexOf("/") >= 0)
-				if(System.getProperty("os.name").indexOf("nux") != -1)
+				if(System.getProperty("os.name").toLowerCase().indexOf("nux") != -1)
 				{
 					if(inFile.getParentFile() != null)
 						fpath.append("/" + dir);
@@ -277,7 +277,7 @@ public class Main
 						directory.mkdir();
 					fpath.append("/");
 				}
-				else if(System.getProperty("os.name").indexOf("win") != -1)
+				else if(System.getProperty("os.name").toLowerCase().indexOf("win") != -1)
 				{
 					if(inFile.getParentFile() != null)
 						fpath.append("\\" + dir);
@@ -289,11 +289,11 @@ public class Main
 					fpath.append("\\");
 				}
 			} else if (inFile.getParentFile() != null){
-				if(System.getProperty("os.name").indexOf("nux") != -1)
+				if(System.getProperty("os.name").toLowerCase().indexOf("nux") != -1)
 				{
 					fpath.append("/");
 				}
-				else if(System.getProperty("os.name").indexOf("win") != -1)
+				else if(System.getProperty("os.name").toLowerCase().indexOf("win") != -1)
 				{
 					fpath.append("\\");
 				}
