@@ -257,31 +257,49 @@ public class Main
 			
 			fname.append(ext);
 			StringBuilder fpath = new StringBuilder();
-			fpath.append(inFile.getParentFile());
 			
-			if(fpath.indexOf("/") >= 0)
+			
+			if(inFile.getParentFile() != null){
+				fpath.append(inFile.getParentFile());
+			}
+			
+			if(!dir.equals(""))
 			{
-				if(!dir.equals(""))
+//				if(fpath.indexOf("/") >= 0)
+				if(System.getProperty("os.name").indexOf("nux") != -1)
 				{
-					fpath.append("/" + dir);
+					if(inFile.getParentFile() != null)
+						fpath.append("/" + dir);
+					else
+						fpath.append(dir);
 					File directory = new File(fpath.toString());
 					if(!directory.exists())
 						directory.mkdir();
+					fpath.append("/");
 				}
-				fpath.append("/" + fname.toString());
-			}
-			else
-			{
-				if(!dir.equals(""))
+				else if(System.getProperty("os.name").indexOf("win") != -1)
 				{
-					fpath.append("\\" + dir);
+					if(inFile.getParentFile() != null)
+						fpath.append("\\" + dir);
+					else
+						fpath.append(dir);
 					File directory = new File(fpath.toString());
 					if(!directory.exists())
 						directory.mkdir();
+					fpath.append("\\");
 				}
-				fpath.append("\\" + fname.toString());
+			} else if (inFile.getParentFile() != null){
+				if(System.getProperty("os.name").indexOf("nux") != -1)
+				{
+					fpath.append("/");
+				}
+				else if(System.getProperty("os.name").indexOf("win") != -1)
+				{
+					fpath.append("\\");
+				}
 			}
-				
+			
+			fpath.append(fname.toString());
 			
 			out[i] = new File(fpath.toString());
 		}
