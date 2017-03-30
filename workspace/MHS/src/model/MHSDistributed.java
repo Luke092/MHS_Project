@@ -10,7 +10,7 @@ public class MHSDistributed extends MHS{
 		Components comp = Components.getInstance();
 		DistHypothesis h0 = new DistHypothesis(comp.getcM() - comp.getDeletedColumns().size(), comp.getK());
 		h0.setField();
-		OrderedHList current = new OrderedHList();
+		Vector<Hypothesis> current = new Vector<Hypothesis>();
 		current.add(h0);
 		this.delta = new Vector<>();
 		
@@ -20,7 +20,7 @@ public class MHSDistributed extends MHS{
 		{
 //			System.out.println("Lvl: " + this.level);
 //			System.out.println("Current: " + current);
-			OrderedHList next = new OrderedHList();
+			Vector<Hypothesis> next = new Vector<Hypothesis>();
 			for(int i = 0; i < current.size(); i++)
 			{
 				Hypothesis h = current.get(i);

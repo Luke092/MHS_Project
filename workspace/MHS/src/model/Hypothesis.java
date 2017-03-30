@@ -96,9 +96,9 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 	 * @param current list of the hypotheses analyzed at the current level
 	 * @return the updated list of the children
 	 */
-	public OrderedHList generateChildren(OrderedHList _next, OrderedHList current)
+	public Vector<Hypothesis> generateChildren(Vector<Hypothesis> _next, Vector<Hypothesis> current)
 	{
-		OrderedHList next = _next;
+		Vector<Hypothesis> next = _next;
 		if(this.bits.isEmpty())
 		{
 			for(int i = 0; i < this.cM; i++)
@@ -125,7 +125,10 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 			int predIndex = current.indexOf(this); 
 			do
 			{
-				pred = current.get(--predIndex);
+				if(--predIndex >= 0)
+					pred = current.get(predIndex);
+				else
+					pred = null;
 			}
 			while(!(pred == null || this.hammingDistance(pred) == 2));
 
@@ -183,7 +186,10 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 
 								// Correct algorithm
 								while(!(pred == null || pred.compareTo(h2) == 0 || pred.compareTo(h2) >= 0)){
-									pred = current.get(--predIndex);
+									if(--predIndex >= 0)
+										pred = current.get(predIndex);
+									else
+										pred = null;
 								}
 
 								if(pred == null || pred.compareTo(h2) != 0){
