@@ -12,6 +12,8 @@ public class Components {
 	private static Components instance;
 
 	private int cM;
+	
+	private StringBuilder componentsCardinality;
 
 	public static Components getInstance(){
 		if(instance == null){
@@ -25,10 +27,15 @@ public class Components {
 		this.cM = -1;
 		
 		this.deletedColumns = new Vector<>();
+		
+		this.componentsCardinality = new StringBuilder();
 	}
 
 	public void addComponent(Component c){
 		this.components.add(c);
+		this.componentsCardinality.append(";;; Component C" + 
+					(this.components.size() - 1) + 
+					": |MHS|=" + c.getSize() + "\n");
 	}
 
 	public BitSet checkHypothesis(Hypothesis h){
@@ -77,6 +84,10 @@ public class Components {
 
 	public Vector<Integer> getDeletedColumns() {
 		return this.deletedColumns;
+	}
+	
+	public String getComponentsCardinality(){
+		return this.componentsCardinality.toString();
 	}
 
 }

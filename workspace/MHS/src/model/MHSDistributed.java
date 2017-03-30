@@ -78,6 +78,9 @@ public class MHSDistributed extends MHS{
 		sb.append(components.getK());
 		sb.append("\n");
 		
+		// Components cardinality
+		sb.append(components.getComponentsCardinality());
+		
 		
 		//level reached (if not completed)
 		if(!this.ended)

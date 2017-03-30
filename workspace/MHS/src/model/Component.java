@@ -70,5 +70,9 @@ public class Component {
 			h.pruneHypothesis(deletedColumns);
 		}
 	}
+	
+	public int getSize(){
+		return this.queue.size();
+	}
 
 }
