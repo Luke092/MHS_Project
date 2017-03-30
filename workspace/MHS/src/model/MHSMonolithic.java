@@ -80,7 +80,7 @@ public class MHSMonolithic extends MHS implements Runnable {
 		StringBuilder sb = new StringBuilder();
 		
 		// matrix summary
-		sb.append(";;; M[");
+		sb.append(";;; NxM[");
 		sb.append(this.matrix.getcN());
 		sb.append(", ");
 		sb.append(this.matrix.getcM());
