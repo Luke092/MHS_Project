@@ -14,7 +14,7 @@ public class DistHypothesis extends Hypothesis {
 
 	@Override
 	public void setField() {
-		if(this.getBits().cardinality() == 0){
+		if(this.getCardinality() == 0){
 			this.vector.clear();
 		} else {
 			this.vector = Components.getInstance().checkHypothesis(this);

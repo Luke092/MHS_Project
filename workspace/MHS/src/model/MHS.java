@@ -100,7 +100,7 @@ public abstract class MHS {
 		HashMap<Integer, Integer> distribution = new HashMap<>();
 		for(int i = 0; i < this.delta.size(); i++){
 			Hypothesis h = delta.get(i);
-			int k = h.getBits().cardinality();
+			int k = h.getCardinality();
 			if(distribution.containsKey(k)){
 				distribution.replace(k, distribution.get(k) + 1);
 			} else {

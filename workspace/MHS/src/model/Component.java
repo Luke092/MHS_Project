@@ -31,7 +31,7 @@ public class Component {
 		int i = 0;
 		
 		while(head != null && h.compareTo(head) <= 0){
-			if(h.getBits().cardinality() == head.getBits().cardinality()){
+			if(h.getCardinality() == head.getCardinality()){
 				int compare = h.compareTo(head);
 				if(compare > 0){
 					return false;
@@ -39,7 +39,7 @@ public class Component {
 					this.queue.remove(i);
 					return true;
 				}
-			} else if (h.getBits().cardinality() < head.getBits().cardinality()) {
+			} else if (h.getCardinality() < head.getCardinality()) {
 				return false;
 			}
 			if(++i < this.queue.size())

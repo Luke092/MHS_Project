@@ -29,6 +29,8 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 	 * Number of elements in the hypothesis
 	 */
 	int cM;
+	
+	private int cardinality;
 
 	/**
 	 * Constructor of the hypothesis
@@ -54,6 +56,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 	 */
 	public void setBit(int index, boolean value){
 		this.bits.set(index, value);
+		this.cardinality = this.bits.cardinality();
 	}
 
 	/**
@@ -62,6 +65,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 	 */
 	public void setBits(BitSet bs){
 		this.bits = bs;
+		this.cardinality = this.bits.cardinality();
 	}
 
 	/**
@@ -139,7 +143,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 					try
 					{
 						Hypothesis h1 = (Hypothesis) this.clone();
-						h1.getBits().set(i, true);
+						h1.setBit(i, true);
 						h1.setLeftParent(this);
 						h1.setField();
 						h1.propagate(this);
@@ -149,7 +153,7 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 							Hypothesis h2 = (Hypothesis) h1.clone();
 							if(h1.getBits().get(j) != false)
 							{
-								h2.getBits().set(j, false);
+								h2.setBit(j, false);
 
 								//Faulted algorithm
 								//								if(pred == null || pred.compareTo(h2) != 0)
@@ -254,6 +258,10 @@ public abstract class Hypothesis implements Comparable<Hypothesis>, Cloneable{
 				count++;
 		}
 		return count;
+	}
+	
+	public int getCardinality(){
+		return this.cardinality;
 	}
 
 	/**
