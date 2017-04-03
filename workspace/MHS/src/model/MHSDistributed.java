@@ -70,7 +70,7 @@ public class MHSDistributed extends MHS{
 		
 		//Deleted Columns
 		sb.append(";;; |M'| = ");
-		sb.append(components.getDeletedColumns().size());
+		sb.append(components.getcM() - components.getDeletedColumns().size());
 		sb.append("\n");
 		
 		// Component size
