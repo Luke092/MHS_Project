@@ -11,6 +11,10 @@ import model.events.ExecutionEvent;
  */
 public abstract class MHS {
 	
+	public MHS(){
+		this.delta = new Vector<>();
+	}
+	
 	private ExecutionEvent observer;
 	
 	public void setObserver(ExecutionEvent o){
