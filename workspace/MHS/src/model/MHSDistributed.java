@@ -8,7 +8,12 @@ public class MHSDistributed extends MHS{
 	@Override
 	public void explore() {
 		Components comp = Components.getInstance();
-		DistHypothesis h0 = new DistHypothesis(comp.getcM() - comp.getDeletedColumns().size(), comp.getK());
+		int dim = comp.getcM() - comp.getDeletedColumns().size();
+		if(dim < 0){
+			// components has no elements, so no calculation is needed
+			return;
+		}
+		DistHypothesis h0 = new DistHypothesis(dim, comp.getK());
 		h0.setField();
 		Vector<Hypothesis> current = new Vector<Hypothesis>();
 		current.add(h0);
@@ -70,7 +75,7 @@ public class MHSDistributed extends MHS{
 		
 		//Deleted Columns
 		sb.append(";;; |M'| = ");
-		sb.append(components.getDeletedColumns().size());
+		sb.append(components.getcM() - components.getDeletedColumns().size());
 		sb.append("\n");
 		
 		// Component size
