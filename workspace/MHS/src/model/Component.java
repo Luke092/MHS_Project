@@ -29,23 +29,22 @@ public class Component {
 	public boolean isMHS(Hypothesis h){
 		Hypothesis head = this.queue.peek();
 		int i = 0;
-		
-		while(head != null && h.compareTo(head) <= 0){
-			if(h.getCardinality() == head.getCardinality()){
-				int compare = h.compareTo(head);
-				if(compare > 0){
-					return false;
-				} else if(compare == 0){
-					this.queue.remove(i);
-					return true;
-				}
-			} else if (h.getCardinality() < head.getCardinality()) {
+		int compare = (head == null)? 2 : h.compareTo(head);
+		while(head != null && compare <= 0){
+
+			if(compare == 0){
+				this.queue.remove(i);
+				return true;
+			}
+			else if (h.getCardinality() < head.getCardinality()) {
 				return false;
 			}
 			if(++i < this.queue.size())
 				head = this.queue.get(i);
 			else
 				head = null;
+			
+			compare = (head == null)? 2 : h.compareTo(head);
 		}
 		
 		
